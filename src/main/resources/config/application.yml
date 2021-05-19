@@ -1,0 +1,34 @@
+server:
+  port: ${APP_SERVER_PORT}
+spring:
+  jackson:
+    mapper:
+      default-view-inclusion: true
+    serialization:
+      indent-output: false
+  session:
+    store-type: none
+
+qup:
+  service:
+    datasource:
+      primary:
+        url: ${APP_DB_NAME}
+        driverClassName: ${APP_DB_DRIVER_CLASS}
+        username: ${APP_DB_USERNAME}
+        password: ${APP_DB_PASSWORD}
+        max:
+          connection:
+            pool-size: ${APP_DB_MAX_CONNECTION_POOL_SIZE}
+    jpa:
+      packages-to-scan: com.jworks
+      hibernate:
+        show-sql: ${APP_DB_SHOW_SQL}
+        ddl-auto: ${APP_DB_DDL_AUTO}
+        dialect: org.hibernate.dialect.MySQL55Dialect
+    liquibase:
+      enable: ${APP_LIQUIBASE_ENABLED}
+      changelog: classpath:config/liquibase/index.xml
+    jwt:
+      secret: ${APP_JWT_SECRET}
+      expiration-period-milli-seconds: ${APP_JWT_EXPIRATION_PERIOD_SECONDS}
