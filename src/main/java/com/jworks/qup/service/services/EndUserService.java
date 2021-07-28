@@ -2,9 +2,8 @@ package com.jworks.qup.service.services;
 
 import com.jworks.app.commons.enums.EntityStatus;
 import com.jworks.app.commons.enums.Role;
-import com.jworks.app.commons.exceptions.NotFoundRestApiException;
-import com.jworks.app.commons.exceptions.SystemServiceException;
-import com.jworks.app.commons.exceptions.UnProcessableOperationException;
+import com.jworks.app.commons.exceptions.*;
+import com.jworks.app.commons.models.PasswordResetDto;
 import com.jworks.app.commons.services.impl.ServiceBluePrintImpl;
 import com.jworks.qup.service.entities.EndUser;
 import com.jworks.qup.service.entities.EndUserOnboardRequest;
@@ -67,6 +66,24 @@ public class EndUserService extends ServiceBluePrintImpl<EndUser, EndUserDto> im
         //todo send welcome email
     }
 
+    public void resetUserPassword(PasswordResetDto passwordResetDto , String userReference) throws SystemServiceException, NotFoundRestApiException {
+
+        EndUser endUserToUpdate = getUserByUserReference(userReference);
+
+        String confirmPassword = passwordResetDto.getConfirmPassword();
+        String password = passwordResetDto.getNewPassword();
+
+        if(!password.equals(confirmPassword)){
+            throw new BadRequestException("Passwords do not match");
+        }
+
+        String encodePassword = passwordEncoder.encode(password);
+
+        endUserToUpdate.setPassword(encodePassword);
+
+        update(endUserToUpdate);
+
+    }
 
     @Override
     public EndUserDto convertEntityToDto(EndUser entity) {
