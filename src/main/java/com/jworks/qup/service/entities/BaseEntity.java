@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.ToString;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,6 +34,7 @@ public class BaseEntity {
 
     @Column(name = "status", nullable = false,length = 20)
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("PENDING")
     private EntityStatus entityStatus;
 
     @Override

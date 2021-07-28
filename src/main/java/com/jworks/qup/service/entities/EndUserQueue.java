@@ -66,7 +66,7 @@ public class EndUserQueue extends BaseEntity implements Serializable {
     @JoinColumn(name = "queue_owner_id", referencedColumnName = "id", nullable = false)
     private EndUser endUser;
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "queue")
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "endUserQueue")
     private EndUserPoolConfig poolConfig;
 
     @ManyToOne(fetch = FetchType.LAZY)
