@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @since 17/12/2020
  */
 
-@Entity(name = "businesses")
+@Entity
 @Data
 @Builder
 @Indexed

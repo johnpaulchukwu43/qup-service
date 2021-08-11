@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @since 17/12/2020
  */
 
-@Entity(name = "end_user_reservations")
+@Entity
 @Data
 @Builder
 @Indexed

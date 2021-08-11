@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * @since 17/12/2020
  */
 
-@Entity(name="end_user_queues")
+@Entity
 @Data
 @Builder
 @Indexed
