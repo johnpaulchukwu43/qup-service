@@ -1,21 +1,21 @@
 package com.jworks.qup.service.controllers;
 
-import com.jworks.app.commons.exceptions.*;
+import com.jworks.app.commons.exceptions.NotFoundRestApiException;
+import com.jworks.app.commons.exceptions.SystemServiceException;
+import com.jworks.app.commons.exceptions.UnProcessableOperationException;
 import com.jworks.app.commons.models.ApiResponseDto;
-import com.jworks.app.commons.models.AuthenticationResponse;
 import com.jworks.app.commons.models.PageOutput;
-import com.jworks.app.commons.models.PasswordResetDto;
 import com.jworks.app.commons.utils.ApiUtil;
 import com.jworks.app.commons.utils.RestConstants;
-import com.jworks.qup.service.models.*;
-import com.jworks.qup.service.services.EndUserAuthenticationService;
-import com.jworks.qup.service.services.EndUserOnBoardService;
+import com.jworks.qup.service.models.ClientSearchQueueDto;
+import com.jworks.qup.service.models.CreateEndUserQueueDto;
+import com.jworks.qup.service.models.EndUserQueueDto;
+import com.jworks.qup.service.models.AssignBusinessToQueueDto;
+import com.jworks.qup.service.services.EndUserQueueBusinessService;
 import com.jworks.qup.service.services.EndUserQueueService;
-import com.jworks.qup.service.services.EndUserService;
 import com.jworks.qup.service.utils.HasAuthority;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +23,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.jworks.app.commons.utils.AppUtil.fromPaginationRequest;
 
@@ -47,6 +42,8 @@ public class EndUserQueueController {
 
 
     private final EndUserQueueService endUserQueueService;
+
+    private final EndUserQueueBusinessService endUserQueueBusinessService;
 
     @PostMapping
     @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
@@ -84,6 +81,18 @@ public class EndUserQueueController {
         PageOutput<EndUserQueueDto> queuesBelongingToUser = endUserQueueService.getQueueBelongingToUser(clientSearchQueueDto, fromPaginationRequest(page, size));
 
         return ApiUtil.response(HttpStatus.OK, ApiResponseDto.Status.success,"Queue records found",queuesBelongingToUser);
+
+    }
+
+    @PutMapping("assign-business")
+    @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
+    public ResponseEntity<ApiResponseDto> assignBusinessToQueue(AssignBusinessToQueueDto assignBusinessToQueueDto) throws SystemServiceException, UnProcessableOperationException, NotFoundRestApiException {
+
+        String loggedInUserReference = ApiUtil.getLoggedInUser();
+
+        endUserQueueBusinessService.attachBusinessToQueue(assignBusinessToQueueDto, loggedInUserReference);
+
+        return ApiUtil.updated("Queue");
 
     }
 }

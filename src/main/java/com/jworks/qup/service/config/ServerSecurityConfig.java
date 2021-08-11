@@ -34,9 +34,9 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private final String [] whiteListedEndPoints = new String[]{
-            RestConstants.API_V1_PREFIX +"/user/authenticate",
-            RestConstants.API_V1_PREFIX +"/user/verify",
-            RestConstants.API_V1_PREFIX +"/user/signup"
+            RestConstants.API_V1_PREFIX +"/users/authenticate",
+            RestConstants.API_V1_PREFIX +"/users/verify",
+            RestConstants.API_V1_PREFIX +"/users/signup"
     };
 
     @Override
