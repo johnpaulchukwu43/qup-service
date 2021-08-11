@@ -1,5 +1,6 @@
 package com.jworks.qup.service.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.stereotype.Indexed;
 
@@ -26,6 +27,7 @@ public class EndUserPoolConfig extends BaseEntity implements Serializable {
     @Column(name = "capacity", nullable = false)
     private Long capacity;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "queue_id", referencedColumnName = "id", nullable = false)
     private EndUserQueue endUserQueue;

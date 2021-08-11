@@ -37,7 +37,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(
-        value = RestConstants.API_V1_PREFIX + "/user",
+        value = RestConstants.API_V1_PREFIX + "/users",
         produces = MediaType.APPLICATION_JSON_VALUE
 )
 @RequiredArgsConstructor

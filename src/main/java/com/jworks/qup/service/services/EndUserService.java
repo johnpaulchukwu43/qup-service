@@ -116,7 +116,7 @@ public class EndUserService extends ServiceBluePrintImpl<EndUser, EndUserDto> im
         return convertEntityToDto(getUserByUserReference(endUserReference));
     }
 
-    private EndUser getUserByUserReference(String endUserReference) throws NotFoundRestApiException {
+    public EndUser getUserByUserReference(String endUserReference) throws NotFoundRestApiException {
         return endUserRepository.findByUserReference(endUserReference)
                 .orElseThrow(() -> new NotFoundRestApiException(String.format("User with reference %s not found.", endUserReference)));
     }

@@ -7,12 +7,12 @@ package com.jworks.qup.service.enums;
 public enum QueuePurpose {
     PERSONAL, BUSINESS;
 
-    public static boolean contains(String queuePurpose){
-        for (QueuePurpose q: QueuePurpose.values()) {
-            if (q.name().equals(queuePurpose)) {
-                return true;
+    public static QueuePurpose toQueuePurpose(String queuePurpose){
+        for (QueuePurpose qp: QueuePurpose.values()) {
+            if (qp.name().equalsIgnoreCase(queuePurpose)) {
+                return qp;
             }
         }
-        return false;
+        throw new IllegalArgumentException(String.format("Unrecognized value: %s as queue purpose", queuePurpose));
     }
 }

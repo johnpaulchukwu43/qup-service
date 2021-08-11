@@ -7,12 +7,13 @@ package com.jworks.qup.service.enums;
 public enum QueueStatus {
     PENDING,ACTIVE,INACTIVE,RESET;
 
-    public static boolean contains(String queueStatus){
+    public static QueueStatus toQueueStatus(String queueStatus){
         for (QueueStatus q: QueueStatus.values()) {
-            if (q.name().equals(queueStatus)) {
-                return true;
+            if (q.name().equalsIgnoreCase(queueStatus)) {
+                return q;
             }
         }
-        return false;
+
+        throw new IllegalArgumentException(String.format("Unrecognized value: %s as queue status", queueStatus));
     }
 }
