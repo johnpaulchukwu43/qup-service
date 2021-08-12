@@ -3,6 +3,7 @@ package com.jworks.qup.service.services;
 import com.jworks.app.commons.exceptions.BadRequestException;
 import com.jworks.app.commons.exceptions.NotFoundRestApiException;
 import com.jworks.app.commons.exceptions.SystemServiceException;
+import com.jworks.app.commons.exceptions.UnProcessableOperationException;
 import com.jworks.app.commons.models.PageOutput;
 import com.jworks.app.commons.services.impl.ServiceBluePrintImpl;
 import com.jworks.app.commons.utils.ReferenceGenerator;
@@ -15,12 +16,14 @@ import com.jworks.qup.service.enums.QueueStatus;
 import com.jworks.qup.service.models.ClientSearchQueueDto;
 import com.jworks.qup.service.models.CreateEndUserQueueDto;
 import com.jworks.qup.service.models.EndUserQueueDto;
+import com.jworks.qup.service.models.EndUserQueueStatusDto;
 import com.jworks.qup.service.repositories.EndUserQueueRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +32,7 @@ import java.time.LocalDateTime;
 
 import static com.jworks.app.commons.utils.AppUtil.toLocalDateTime;
 import static com.jworks.app.commons.utils.ReferenceGenerator.INTENT_QUEUE_REFERENCE;
+import static com.jworks.qup.service.enums.QueueStatus.toQueueStatus;
 
 /**
  * @author Johnpaul Chukwu.
@@ -77,6 +81,20 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
 
     }
 
+    public void changeQueueStatus(Long queueId, EndUserQueueStatusDto endUserQueueStatusDto, String userReference) throws NotFoundRestApiException, UnProcessableOperationException, SystemServiceException {
+
+        EndUserQueue endUserQueue = endUserQueueRepository.findById(queueId)
+                .orElseThrow(() -> new UnProcessableOperationException(String.format("Queue with id: %s does not exist.", queueId)));
+
+        if(!userReference.equals(endUserQueue.getEndUser().getUserReference())) throw new UnauthorizedUserException("Cannot update status of queue belonging to another user.");
+
+        QueueStatus queueStatusTobeUpdatedTo = toQueueStatus(endUserQueueStatusDto.getQueueStatus());
+
+        endUserQueue.setQueueStatus(queueStatusTobeUpdatedTo);
+        //todo check if the queueStatusTobeUpdatedTo is reset, then invalidate all reservations
+        save(endUserQueue);
+    }
+
     private void createAssociatedPoolConfigForQueue(EndUserQueue endUserQueue, Long poolCapacity) throws SystemServiceException {
         endUserPoolConfigService.save(
                 new EndUserPoolConfig(poolCapacity, endUserQueue)
@@ -99,7 +117,7 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
         Timestamp expiryDate = null;
 
         if(StringUtils.isNotBlank(clientSearchQueueDto.getQueueStatus())){
-            queueStatus = QueueStatus.toQueueStatus(clientSearchQueueDto.getQueueStatus());
+            queueStatus = toQueueStatus(clientSearchQueueDto.getQueueStatus());
         }
 
         if(StringUtils.isNotBlank(clientSearchQueueDto.getQueuePurpose())){

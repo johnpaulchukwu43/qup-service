@@ -7,10 +7,7 @@ import com.jworks.app.commons.models.ApiResponseDto;
 import com.jworks.app.commons.models.PageOutput;
 import com.jworks.app.commons.utils.ApiUtil;
 import com.jworks.app.commons.utils.RestConstants;
-import com.jworks.qup.service.models.ClientSearchQueueDto;
-import com.jworks.qup.service.models.CreateEndUserQueueDto;
-import com.jworks.qup.service.models.EndUserQueueDto;
-import com.jworks.qup.service.models.AssignBusinessToQueueDto;
+import com.jworks.qup.service.models.*;
 import com.jworks.qup.service.services.EndUserQueueBusinessService;
 import com.jworks.qup.service.services.EndUserQueueService;
 import com.jworks.qup.service.utils.HasAuthority;
@@ -86,13 +83,25 @@ public class EndUserQueueController {
 
     @PutMapping("assign-business")
     @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
-    public ResponseEntity<ApiResponseDto> assignBusinessToQueue(AssignBusinessToQueueDto assignBusinessToQueueDto) throws SystemServiceException, UnProcessableOperationException, NotFoundRestApiException {
+    public ResponseEntity<ApiResponseDto> assignBusinessToQueue(@Validated @RequestBody AssignBusinessToQueueDto assignBusinessToQueueDto) throws SystemServiceException, UnProcessableOperationException, NotFoundRestApiException {
 
         String loggedInUserReference = ApiUtil.getLoggedInUser();
 
         endUserQueueBusinessService.attachBusinessToQueue(assignBusinessToQueueDto, loggedInUserReference);
 
         return ApiUtil.updated("Queue");
+
+    }
+
+    @PutMapping("{queueId}/change-status")
+    @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
+    public ResponseEntity<ApiResponseDto> updateQueueStatus(@Validated @RequestBody EndUserQueueStatusDto endUserQueueStatusDto, @PathVariable Long queueId) throws SystemServiceException, UnProcessableOperationException, NotFoundRestApiException {
+
+        String loggedInUserReference = ApiUtil.getLoggedInUser();
+
+        endUserQueueService.changeQueueStatus(queueId,endUserQueueStatusDto, loggedInUserReference);
+
+        return ApiUtil.updated("Queue status");
 
     }
 }
