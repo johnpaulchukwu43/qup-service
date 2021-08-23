@@ -36,7 +36,8 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     private final String [] whiteListedEndPoints = new String[]{
             RestConstants.API_V1_PREFIX +"/users/authenticate",
             RestConstants.API_V1_PREFIX +"/users/verify",
-            RestConstants.API_V1_PREFIX +"/users/signup"
+            RestConstants.API_V1_PREFIX +"/users/signup",
+            RestConstants.API_V1_PREFIX +"/queues-info"
     };
 
     @Override

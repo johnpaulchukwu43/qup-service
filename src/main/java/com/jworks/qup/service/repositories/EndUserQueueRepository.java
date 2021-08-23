@@ -5,6 +5,7 @@ import com.jworks.qup.service.entities.EndUserQueue;
 import com.jworks.qup.service.enums.QueuePurpose;
 import com.jworks.qup.service.enums.QueueStatus;
 import com.jworks.qup.service.models.EndUserQueueDto;
+import com.jworks.qup.service.models.EndUserQueueInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -41,5 +42,21 @@ public interface EndUserQueueRepository extends BaseRepository<EndUserQueue,Long
             @Param("expiryDate") Timestamp expiryDate,
             Pageable pageable
     );
+
+    @Query(
+            "SELECT new com.jworks.qup.service.models.EndUserQueueInfo(euq) FROM EndUserQueue euq " +
+                    "WHERE ((:businessName IS NULL) OR (euq.business.name LIKE %:businessName%))" +
+                    "AND ((:queueCode IS NULL) OR (euq.queueCode LIKE %:queueCode%))"+
+                    "AND ((:queueName IS NULL) OR (euq.name LIKE %:queueName%))"
+    )
+    Page<EndUserQueueInfo> getAllQueueInfoFilteredBy(
+            @Param("queueCode") String queueCode,
+            @Param("businessName") String businessName,
+            @Param("queueName") String queueName,
+            Pageable pageable
+    );
+
+
+
 
 }

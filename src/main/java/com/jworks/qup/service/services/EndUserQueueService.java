@@ -13,10 +13,7 @@ import com.jworks.qup.service.entities.EndUserQueue;
 import com.jworks.qup.service.enums.QueueLocationType;
 import com.jworks.qup.service.enums.QueuePurpose;
 import com.jworks.qup.service.enums.QueueStatus;
-import com.jworks.qup.service.models.ClientSearchQueueDto;
-import com.jworks.qup.service.models.CreateEndUserQueueDto;
-import com.jworks.qup.service.models.EndUserQueueDto;
-import com.jworks.qup.service.models.EndUserQueueStatusDto;
+import com.jworks.qup.service.models.*;
 import com.jworks.qup.service.repositories.EndUserQueueRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -150,5 +147,16 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
     public EndUserQueue getQueueById(Long queueId) throws NotFoundRestApiException {
         return endUserQueueRepository.findById(queueId)
                 .orElseThrow(() -> new NotFoundRestApiException(String.format("Queue with id %s not found.", queueId)));
+    }
+
+    public PageOutput<EndUserQueueInfo> searchForQueueInfo(ClientSearchQueueInfo clientSearchQueueInfo, PageRequest paginationRequest) {
+        Page<EndUserQueueInfo> queueInfos = endUserQueueRepository.getAllQueueInfoFilteredBy(
+                clientSearchQueueInfo.getQueueCode(),
+                clientSearchQueueInfo.getBusinessName(),
+                clientSearchQueueInfo.getQueueName(),
+                paginationRequest
+        );
+
+        return PageOutput.fromPage(queueInfos);
     }
 }
