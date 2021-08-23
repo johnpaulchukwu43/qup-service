@@ -146,4 +146,9 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
         return  PageOutput.fromPage(endUserQueues);
 
     }
+
+    public EndUserQueue getQueueById(Long queueId) throws NotFoundRestApiException {
+        return endUserQueueRepository.findById(queueId)
+                .orElseThrow(() -> new NotFoundRestApiException(String.format("Queue with id %s not found.", queueId)));
+    }
 }

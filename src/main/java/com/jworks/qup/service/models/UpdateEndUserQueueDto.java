@@ -25,14 +25,14 @@ public class UpdateEndUserQueueDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    @PositiveOrZero(message = "maxNumberOfUsersOnQueue cannot be less than o")
+    @PositiveOrZero(message = "maxNumberOfUsersOnQueue cannot be less than 0")
     private Long maxNumberOfUsersOnQueue;
 
     @Future
     @NotNull(message =  "maxNumberOfUsersInPool is required")
     private LocalDateTime expirationDate;
 
-    @PositiveOrZero(message = "maxNumberOfUsersInPool cannot be less than o")
+    @PositiveOrZero(message = "maxNumberOfUsersInPool cannot be less than 0")
     private Long maxNumberOfUsersInPool;
 
 }
