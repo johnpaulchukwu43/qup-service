@@ -25,11 +25,9 @@ public class ClientSearchReservationDto implements Serializable {
 
     private String queueCode;
 
-    private String createdOn;
+    private String createdOnStartDate;
 
-    private String userReference;
-
-    private String expiryDate;
+    private String createdOnEndDate;
 
     private String reservationStatus;
 

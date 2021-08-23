@@ -4,9 +4,10 @@ import com.jworks.app.commons.exceptions.NotFoundRestApiException;
 import com.jworks.app.commons.exceptions.SystemServiceException;
 import com.jworks.app.commons.exceptions.UnProcessableOperationException;
 import com.jworks.app.commons.models.ApiResponseDto;
+import com.jworks.app.commons.models.PageOutput;
 import com.jworks.app.commons.utils.ApiUtil;
 import com.jworks.app.commons.utils.RestConstants;
-import com.jworks.qup.service.models.CreateReservationDto;
+import com.jworks.qup.service.models.*;
 import com.jworks.qup.service.services.EndUserReservationService;
 import com.jworks.qup.service.utils.HasAuthority;
 import lombok.RequiredArgsConstructor;
@@ -15,14 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.jworks.app.commons.utils.AppUtil.fromPaginationRequest;
 
 /**
  * @author Johnpaul Chukwu.
@@ -56,5 +57,43 @@ public class EndUserReservationController {
         return ApiUtil.response(HttpStatus.OK, ApiResponseDto.Status.success, "Successfully created reservation.", response);
     }
 
+    @GetMapping("/user/{userReference}")
+    @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
+    public ResponseEntity<ApiResponseDto> getReservationsBelongingToUser(@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
+                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
+                                                                  @RequestParam(name = "reservationStatus", required = false) String reservationStatus,
+                                                                  @RequestParam(name = "queueCode", required = false) String queueCode,
+                                                                  @RequestParam(name = "reservationCode", required = false) String reservationCode,
+                                                                  @RequestParam(name = "createdOnEndDate", required = false) String createdOnEndDate,
+                                                                  @RequestParam(name = "createdOnStartDate", required = false) String createdOnStartDate,
+                                                                         @PathVariable String userReference) throws SystemServiceException {
+
+        String loggedInUserReference = ApiUtil.getLoggedInUser();
+
+        if(!loggedInUserReference.equalsIgnoreCase(userReference)) throw new UnauthorizedUserException("Cannot access queues belonging to another user. Confirm the userReference passed is yours.");
+
+        ClientSearchReservationDto clientSearchReservationDto = ClientSearchReservationDto.builder()
+                .queueCode(queueCode)
+                .reservationCode(reservationCode)
+                .createdOnEndDate(createdOnEndDate)
+                .createdOnStartDate(createdOnStartDate)
+                .reservationStatus(reservationStatus)
+                .build();
+
+
+        PageOutput<EndUserReservationDto> reservationsBelongingToUser = endUserReservationService.getReservationsBelongingToUser(clientSearchReservationDto, loggedInUserReference, fromPaginationRequest(page, size));
+
+        return ApiUtil.response(HttpStatus.OK, ApiResponseDto.Status.success,"Queue records found",reservationsBelongingToUser);
+
+    }
+
+    @PutMapping("{reservationCode}/change-status")
+    @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
+    public ResponseEntity<ApiResponseDto> updateReservationStatus(@Validated @RequestBody EndUserReservationStatusDto endUserReservationStatusDto, @PathVariable String reservationCode) throws SystemServiceException, NotFoundRestApiException, UnProcessableOperationException {
+
+         endUserReservationService.updateReservationStatus(endUserReservationStatusDto, reservationCode);
+
+        return ApiUtil.updated("Reservation status");
+    }
 
 }
