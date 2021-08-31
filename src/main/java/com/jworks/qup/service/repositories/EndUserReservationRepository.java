@@ -28,15 +28,35 @@ public interface EndUserReservationRepository extends BaseRepository<EndUserRese
 
     @Query(
             "SELECT new com.jworks.qup.service.models.EndUserReservationDto(eur) FROM EndUserReservation eur " +
-                    "WHERE ((:reservationStatus IS NULL) OR (eur.reservationStatus = :reservationStatus))" +
+                    "WHERE (eur.endUser.userReference = :userReference)" +
+                    "AND ((:reservationStatus IS NULL) OR (eur.reservationStatus = :reservationStatus))" +
                     "AND ((:queueCode IS NULL) OR (eur.endUserQueue.queueCode = :queueCode))" +
-                    "AND ((:userReference IS NULL) OR (eur.endUser.userReference = :userReference))" +
                     "AND ((:reservationCode IS NULL) OR (eur.reservationCode = :reservationCode))"+
                     "AND ((:createdOnStartDate IS NULL AND :createdOnEndDate IS NULL)" +
                     "OR (eur.createdAt >= :createdOnStartDate AND eur.createdAt <= :createdOnEndDate))"
 
     )
-    Page<EndUserReservationDto> getReservationsFiltered(
+    Page<EndUserReservationDto> getReservationsBelongingToUser(
+            @Param("reservationCode") String reservationCode,
+            @Param("createdOnStartDate") Timestamp createdOnStartDate,
+            @Param("createdOnEndDate") Timestamp createdOnEndDate,
+            @Param("queueCode") String queueCode,
+            @Param("reservationStatus") ReservationStatus reservationStatus,
+            @Param("userReference") String userReference,
+            Pageable pageable
+    );
+
+    @Query(
+            "SELECT new com.jworks.qup.service.models.EndUserReservationDto(eur) FROM EndUserReservation eur " +
+                    "WHERE (eur.endUserQueue.endUser.userReference = :userReference)" +
+                    "AND ((:reservationStatus IS NULL) OR (eur.reservationStatus = :reservationStatus))" +
+                    "AND ((:queueCode IS NULL) OR (eur.endUserQueue.queueCode = :queueCode))" +
+                    "AND ((:reservationCode IS NULL) OR (eur.reservationCode = :reservationCode))"+
+                    "AND ((:createdOnStartDate IS NULL AND :createdOnEndDate IS NULL)" +
+                    "OR (eur.createdAt >= :createdOnStartDate AND eur.createdAt <= :createdOnEndDate))"
+
+    )
+    Page<EndUserReservationDto> getReservationsByQueueOwner(
             @Param("reservationCode") String reservationCode,
             @Param("createdOnStartDate") Timestamp createdOnStartDate,
             @Param("createdOnEndDate") Timestamp createdOnEndDate,
