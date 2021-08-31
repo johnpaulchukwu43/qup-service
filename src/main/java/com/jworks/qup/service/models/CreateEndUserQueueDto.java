@@ -48,7 +48,7 @@ public class CreateEndUserQueueDto implements Serializable {
     @ConditionalInputSanitizer(min = 10, message = "queueLocationValue must be at least 10 characters long.")
     private String queueLocationValue;
 
-    @PositiveOrZero(message = "maxNumberOfUsersInPool cannot be less than o")
+    @PositiveOrZero(message = "maxNumberOfUsersInPool cannot be less than 0")
     private Long maxNumberOfUsersInPool;
 
 }

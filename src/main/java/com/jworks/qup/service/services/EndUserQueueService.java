@@ -78,10 +78,28 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
 
     }
 
-    public void changeQueueStatus(Long queueId, EndUserQueueStatusDto endUserQueueStatusDto, String userReference) throws NotFoundRestApiException, UnProcessableOperationException, SystemServiceException {
+
+    public void updateQueueDetails(Long queueId, UpdateEndUserQueueDto updateEndUserQueueDto, String userReference) throws NotFoundRestApiException, SystemServiceException {
+
+        //todo confirm do we need to check if the queue is active before making changes.
 
         EndUserQueue endUserQueue = endUserQueueRepository.findById(queueId)
-                .orElseThrow(() -> new UnProcessableOperationException(String.format("Queue with id: %s does not exist.", queueId)));
+                .orElseThrow(() -> new NotFoundRestApiException(String.format("Queue with id: %s does not exist.", queueId)));
+
+        if(!userReference.equals(endUserQueue.getEndUser().getUserReference())) throw new UnauthorizedUserException("Cannot update queue belonging to another user.");
+
+        endUserQueue.setExpirationDate(updateEndUserQueueDto.getExpirationDate());
+        //todo what happens if we try to update the capacity to a value less than the current number of users on the queue?
+        endUserQueue.setCapacity(updateEndUserQueueDto.getMaxNumberOfUsersOnQueue());
+        //todo what happens if we try to update the capacity to a value less than the current number of users on the pool?
+        endUserQueue.getPoolConfig().setCapacity(updateEndUserQueueDto.getMaxNumberOfUsersInPool());
+        save(endUserQueue);
+    }
+
+    public void changeQueueStatus(Long queueId, EndUserQueueStatusDto endUserQueueStatusDto, String userReference) throws NotFoundRestApiException, SystemServiceException {
+
+        EndUserQueue endUserQueue = endUserQueueRepository.findById(queueId)
+                .orElseThrow(() -> new NotFoundRestApiException(String.format("Queue with id: %s does not exist.", queueId)));
 
         if(!userReference.equals(endUserQueue.getEndUser().getUserReference())) throw new UnauthorizedUserException("Cannot update status of queue belonging to another user.");
 

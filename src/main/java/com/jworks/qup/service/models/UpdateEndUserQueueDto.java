@@ -1,5 +1,8 @@
 package com.jworks.qup.service.models;
 
+import com.jworks.app.commons.validator.ConditionalInputSanitizer;
+import com.jworks.app.commons.validator.ValidEnum;
+import com.jworks.qup.service.enums.QueueLocationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,5 +37,11 @@ public class UpdateEndUserQueueDto implements Serializable {
 
     @PositiveOrZero(message = "maxNumberOfUsersInPool cannot be less than 0")
     private Long maxNumberOfUsersInPool;
+
+    @ConditionalInputSanitizer(min = 10, message = "queueLocationValue must be at least 10 characters long.")
+    private String queueLocationValue;
+
+    @ValidEnum(enumClass = QueueLocationType.class)
+    private String queueLocationType;
 
 }

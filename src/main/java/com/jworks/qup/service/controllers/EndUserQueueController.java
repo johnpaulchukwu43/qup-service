@@ -81,6 +81,18 @@ public class EndUserQueueController {
 
     }
 
+    @PutMapping("{queueId}")
+    @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
+    public ResponseEntity<ApiResponseDto> updateQueue(@Validated @RequestBody UpdateEndUserQueueDto updateEndUserQueueDto, @PathVariable Long queueId) throws SystemServiceException, NotFoundRestApiException {
+
+        String loggedInUserReference = ApiUtil.getLoggedInUser();
+
+        endUserQueueService.updateQueueDetails(queueId,updateEndUserQueueDto, loggedInUserReference);
+
+        return ApiUtil.updated("Queue");
+
+    }
+
     @PutMapping("assign-business")
     @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
     public ResponseEntity<ApiResponseDto> assignBusinessToQueue(@Validated @RequestBody AssignBusinessToQueueDto assignBusinessToQueueDto) throws SystemServiceException, UnProcessableOperationException, NotFoundRestApiException {
@@ -95,7 +107,7 @@ public class EndUserQueueController {
 
     @PutMapping("{queueId}/change-status")
     @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
-    public ResponseEntity<ApiResponseDto> updateQueueStatus(@Validated @RequestBody EndUserQueueStatusDto endUserQueueStatusDto, @PathVariable Long queueId) throws SystemServiceException, UnProcessableOperationException, NotFoundRestApiException {
+    public ResponseEntity<ApiResponseDto> updateQueueStatus(@Validated @RequestBody EndUserQueueStatusDto endUserQueueStatusDto, @PathVariable Long queueId) throws SystemServiceException, NotFoundRestApiException {
 
         String loggedInUserReference = ApiUtil.getLoggedInUser();
 
