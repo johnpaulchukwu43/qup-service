@@ -72,4 +72,6 @@ public class EndUserQueue extends BaseEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_id", referencedColumnName = "id")
     private Business business;
+
+    private boolean requiresQueueForm;
 }
