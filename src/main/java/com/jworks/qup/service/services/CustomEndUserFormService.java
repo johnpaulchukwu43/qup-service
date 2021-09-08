@@ -1,5 +1,6 @@
 package com.jworks.qup.service.services;
 
+import com.jworks.app.commons.enums.EntityStatus;
 import com.jworks.app.commons.exceptions.NotFoundRestApiException;
 import com.jworks.app.commons.exceptions.SystemServiceException;
 import com.jworks.app.commons.exceptions.UnProcessableOperationException;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.jworks.app.commons.utils.ReferenceGenerator.INTENT_QUEUE_FORM;
 import static com.jworks.qup.service.enums.CustomEndUserFormType.toCustomEndUserFormType;
@@ -59,6 +61,10 @@ public class CustomEndUserFormService extends ServiceBluePrintImpl<CustomEndUser
         if (!queue.getEndUser().getUserReference().equals(userReference))
             throw new UnauthorizedUserException("Cannot create form for queue belonging to another user.");
 
+        Set<CustomEndUserForm> customEndUserFormList = queue.getCustomEndUserFormList();
+
+        EntityStatus entityStatus = customEndUserFormList.isEmpty() ? EntityStatus.ACTIVE : EntityStatus.INACTIVE;
+
         CustomEndUserForm customEndUserForm = CustomEndUserForm.builder()
                 .name(createCustomEndUserFormDto.getName())
                 .customEndUserFormType(toCustomEndUserFormType(createCustomEndUserFormDto.getFormType()))
@@ -66,6 +72,8 @@ public class CustomEndUserFormService extends ServiceBluePrintImpl<CustomEndUser
                 .formCode(ReferenceGenerator.generateRef(INTENT_QUEUE_FORM))
                 .endUserQueue(queue)
                 .build();
+
+        customEndUserForm.setEntityStatus(entityStatus);
 
         customEndUserForm = save(customEndUserForm);
 
@@ -111,7 +119,7 @@ public class CustomEndUserFormService extends ServiceBluePrintImpl<CustomEndUser
         if (!queue.getEndUser().getUserReference().equals(userReference))
             throw new UnauthorizedUserException("Cannot get forms for queue belonging to another user.");
 
-        return customEndUserFormRepository.getFormByQueueId(queueId);
+        return customEndUserFormRepository.getFormDtoByQueueId(queueId);
     }
 
     public CustomEndUserFormDto getFormByCode(String code, String userReference) throws UnProcessableOperationException {

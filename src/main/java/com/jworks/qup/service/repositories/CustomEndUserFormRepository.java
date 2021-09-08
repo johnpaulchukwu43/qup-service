@@ -21,7 +21,10 @@ public interface CustomEndUserFormRepository extends BaseRepository<CustomEndUse
 
 
     @Query("SELECT new com.jworks.qup.service.models.CustomEndUserFormDto(userForm) FROM CustomEndUserForm userForm WHERE userForm.endUserQueue.id = :queueId")
-    List<CustomEndUserFormDto> getFormByQueueId(@Param("queueId") Long queueId);
+    List<CustomEndUserFormDto> getFormDtoByQueueId(@Param("queueId") Long queueId);
+
+    @Query("SELECT userForm FROM CustomEndUserForm userForm WHERE userForm.endUserQueue.id = :queueId")
+    List<CustomEndUserForm> getFormByQueueId(@Param("queueId") Long queueId);
 
     Optional<CustomEndUserForm> findByFormCode(String formCode);
 }

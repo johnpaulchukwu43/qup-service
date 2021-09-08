@@ -3,7 +3,6 @@ package com.jworks.qup.service.services;
 import com.jworks.app.commons.exceptions.BadRequestException;
 import com.jworks.app.commons.exceptions.NotFoundRestApiException;
 import com.jworks.app.commons.exceptions.SystemServiceException;
-import com.jworks.app.commons.exceptions.UnProcessableOperationException;
 import com.jworks.app.commons.models.PageOutput;
 import com.jworks.app.commons.services.impl.ServiceBluePrintImpl;
 import com.jworks.app.commons.utils.ReferenceGenerator;
@@ -67,6 +66,7 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
                 .queueLocationValue(createEndUserQueueDto.getQueueLocationValue())
                 .queuePurpose(QueuePurpose.PERSONAL)
                 .queueStatus(QueueStatus.ACTIVE)
+                .requiresQueueForm(false)
                 .build();
 
         endUserQueue = save(endUserQueue);

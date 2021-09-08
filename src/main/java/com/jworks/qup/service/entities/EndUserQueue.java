@@ -9,6 +9,7 @@ import org.springframework.stereotype.Indexed;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * @author Johnpaul Chukwu.
@@ -74,4 +75,9 @@ public class EndUserQueue extends BaseEntity implements Serializable {
     private Business business;
 
     private boolean requiresQueueForm;
+
+    private boolean isFormDefaultSet;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "endUserQueue")
+    private Set<CustomEndUserForm> customEndUserFormList;
 }

@@ -8,6 +8,7 @@ import com.jworks.app.commons.models.PageOutput;
 import com.jworks.app.commons.utils.ApiUtil;
 import com.jworks.app.commons.utils.RestConstants;
 import com.jworks.qup.service.models.*;
+import com.jworks.qup.service.services.EndUserQueueAndCustomFormService;
 import com.jworks.qup.service.services.EndUserQueueBusinessService;
 import com.jworks.qup.service.services.EndUserQueueService;
 import com.jworks.qup.service.utils.HasAuthority;
@@ -41,6 +42,8 @@ public class EndUserQueueController {
     private final EndUserQueueService endUserQueueService;
 
     private final EndUserQueueBusinessService endUserQueueBusinessService;
+
+    private final EndUserQueueAndCustomFormService endUserQueueAndCustomFormService;
 
     @PostMapping
     @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
@@ -102,6 +105,31 @@ public class EndUserQueueController {
         endUserQueueBusinessService.attachBusinessToQueue(assignBusinessToQueueDto, loggedInUserReference);
 
         return ApiUtil.updated("Queue");
+
+    }
+
+
+    @PutMapping("toggle-custom-form-required-option")
+    @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
+    public ResponseEntity<ApiResponseDto> toggleIsCustomFormRequired(@Validated @RequestBody ToggleCustomFormRequirementDto toggleCustomFormRequirementDto) throws SystemServiceException, UnProcessableOperationException, NotFoundRestApiException {
+
+        String loggedInUserReference = ApiUtil.getLoggedInUser();
+
+        endUserQueueAndCustomFormService.updateIsFormRequiredOption(toggleCustomFormRequirementDto, loggedInUserReference);
+
+        return ApiUtil.updated("Queue form required option.");
+
+    }
+
+    @PutMapping("assign-default-custom-form")
+    @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
+    public ResponseEntity<ApiResponseDto> assignDefaultCustomForm(@Validated @RequestBody AssignDefaultCustomFormToQueueDto assignDefaultCustomFormToQueueDto) throws SystemServiceException, UnProcessableOperationException, NotFoundRestApiException {
+
+        String loggedInUserReference = ApiUtil.getLoggedInUser();
+
+        endUserQueueAndCustomFormService.setAsFormDefaultForQueue(assignDefaultCustomFormToQueueDto, loggedInUserReference);
+
+        return ApiUtil.updated("Queue Custom form default.");
 
     }
 
