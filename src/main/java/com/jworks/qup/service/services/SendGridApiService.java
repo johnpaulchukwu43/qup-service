@@ -30,7 +30,7 @@ import static com.jworks.app.commons.utils.AppUtil.stripExtraSlash;
 @Service
 @RequiredArgsConstructor
 public class SendGridApiService {
-    private final RestTemplate serviceRestTemplate;
+    private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     @Value("${sendgrid.base-url}")
     private String baseUrl;
@@ -84,7 +84,7 @@ public class SendGridApiService {
         requestHeaders.add("Authorization", String.format("Bearer %s", apiKey));
 
         try {
-            ResponseEntity<Object> response = serviceRestTemplate.exchange(targetUrl, method,
+            ResponseEntity<Object> response = restTemplate.exchange(targetUrl, method,
                     new HttpEntity<>(requestData, requestHeaders), Object.class);
 
             result.setSuccessful(true);

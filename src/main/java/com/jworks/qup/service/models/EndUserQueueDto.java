@@ -1,14 +1,15 @@
 package com.jworks.qup.service.models;
 
-import com.jworks.qup.service.entities.BaseEntity;
 import com.jworks.qup.service.entities.EndUserPoolConfig;
 import com.jworks.qup.service.entities.EndUserQueue;
 import com.jworks.qup.service.enums.QueueLocationType;
 import com.jworks.qup.service.enums.QueuePurpose;
 import com.jworks.qup.service.enums.QueueStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Indexed;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -21,10 +22,9 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@Indexed
 @NoArgsConstructor
 @AllArgsConstructor
-public class EndUserQueueDto extends BaseEntity implements Serializable {
+public class EndUserQueueDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

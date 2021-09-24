@@ -2,11 +2,13 @@ package com.jworks.qup.service.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.jworks.app.commons.enums.EntityStatus;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,6 +21,9 @@ import java.sql.Timestamp;
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BaseEntity {
 
     @Id
@@ -32,9 +37,8 @@ public class BaseEntity {
     @LastModifiedDate
     private Timestamp updatedAt;
 
-    @Column(name = "status", nullable = false,length = 20)
+    @Column(name = "status", length = 20)
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("PENDING")
     private EntityStatus entityStatus;
 
     @Override

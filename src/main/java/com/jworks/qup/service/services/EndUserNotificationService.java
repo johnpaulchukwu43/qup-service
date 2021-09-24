@@ -38,7 +38,7 @@ public class EndUserNotificationService {
     private final EndUserOnboardNotificationRepository endUserOnboardNotificationRepository;
     private final EndUserNotificationRepository endUserNotificationRepository;
     private final EndUserNotificationProcessor endUserNotificationProcessor;
-    @Value("${pending.customer-dispute-notification.provider-template-code}")
+    @Value("${sendgrid.user-notification-template-code}")
     private String providerTemplateCode;
 
     public void createNotification(EndUserNotificationDto endUserNotificationDto) throws SystemServiceException {

@@ -1,6 +1,5 @@
 package com.jworks.qup.service.models;
 
-import com.jworks.qup.service.entities.BaseEntity;
 import com.jworks.qup.service.entities.CustomEndUserForm;
 import com.jworks.qup.service.enums.CustomEndUserFormType;
 import lombok.AllArgsConstructor;
@@ -8,9 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Indexed;
 
-import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,13 +16,11 @@ import java.util.List;
  * @since 17/12/2020
  */
 
-@Entity
 @Data
 @Builder
-@Indexed
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomEndUserFormDto extends BaseEntity implements Serializable {
+public class CustomEndUserFormDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

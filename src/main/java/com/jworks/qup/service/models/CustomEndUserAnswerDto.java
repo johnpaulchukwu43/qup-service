@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -16,7 +15,6 @@ import java.util.List;
  * @since 01/09/2021
  */
 
-@Entity
 @Data
 @Builder
 @NoArgsConstructor
@@ -45,7 +43,7 @@ public class CustomEndUserAnswerDto implements Serializable {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public class ValidationError implements Serializable {
+    public static class ValidationError implements Serializable {
 
         private Long questionId;
 

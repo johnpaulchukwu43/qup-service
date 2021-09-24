@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 /**
@@ -15,12 +16,13 @@ import java.io.Serializable;
  */
 
 
+@MappedSuperclass
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public abstract class BaseEndUser extends BaseEntity implements Serializable {
+public class BaseEndUser extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "first_name", length = 50)

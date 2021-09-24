@@ -6,7 +6,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
 
@@ -21,13 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "end_users",
-        indexes = {
-        @Index(name = "STATUS_INDEX", columnList = "status"),
-        @Index(name = "EMAIL_ADDRESS_INDEX", columnList = "email_address"),
-        @Index(name = "USER_REFERENCE_INDEX", columnList = "user_reference"),
-        @Index(name = "PHONE_NUMBER_INDEX", columnList = "phone_number")
-})
+@Table(name = "end_users")
 public class EndUser extends BaseEndUser implements Serializable {
 
     private static final long serialVersionUID = 1L;

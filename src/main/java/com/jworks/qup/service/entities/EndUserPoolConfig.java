@@ -1,7 +1,11 @@
 package com.jworks.qup.service.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
@@ -14,7 +18,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Builder
+@SuperBuilder
 @Indexed
 @NoArgsConstructor
 @AllArgsConstructor

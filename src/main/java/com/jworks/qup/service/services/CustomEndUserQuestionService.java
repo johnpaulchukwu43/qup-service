@@ -73,6 +73,7 @@ public class CustomEndUserQuestionService extends ServiceBluePrintImpl<CustomEnd
         customEndUserQuestion.setMinAnswerLength(updatedQuestionBody.getMinAnswerLength());
         customEndUserQuestion.setQuestion(updatedQuestionBody.getQuestion());
         customEndUserQuestion.setEntityStatus(toEntityStatus(updatedQuestionBody.getStatus()));
+        customEndUserQuestion.setRequired(updatedQuestionBody.isRequired());
 
         save(customEndUserQuestion);
 
@@ -96,6 +97,7 @@ public class CustomEndUserQuestionService extends ServiceBluePrintImpl<CustomEnd
                         .customEndUserForm(customEndUserForm)
                         .maxAnswerLength(qr.getMaxAnswerLength())
                         .minAnswerLength(qr.getMinAnswerLength())
+                        .isRequired(qr.isRequired())
                         .build()));
 
         customEndUserQuestionRepository.saveAll(questions);

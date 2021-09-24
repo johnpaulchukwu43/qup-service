@@ -3,7 +3,6 @@ package com.jworks.qup.service.models;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.jworks.app.commons.enums.EntityStatus;
 import com.jworks.app.commons.validator.ValidEnum;
-import com.jworks.qup.service.entities.BaseEntity;
 import com.jworks.qup.service.enums.CustomEndUserAnswerType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +24,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-public class CreateCustomEndUserQuestionDto extends BaseEntity implements Serializable {
+public class CreateCustomEndUserQuestionDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,4 +44,6 @@ public class CreateCustomEndUserQuestionDto extends BaseEntity implements Serial
 
     @ValidEnum(enumClass = EntityStatus.class)
     private String status;
+
+    private boolean isRequired;
 }
