@@ -1,13 +1,13 @@
 package com.jworks.qup.service.models;
 
-import com.jworks.qup.service.entities.BaseEntity;
 import com.jworks.qup.service.entities.CustomEndUserQuestion;
 import com.jworks.qup.service.enums.CustomEndUserAnswerType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Indexed;
 
-import javax.persistence.Entity;
 import java.io.Serializable;
 
 /**
@@ -15,14 +15,11 @@ import java.io.Serializable;
  * @since 01/09/2021
  */
 
-@Entity
 @Data
 @Builder
-@Indexed
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class CustomEndUserQuestionDto extends BaseEntity implements Serializable {
+public class CustomEndUserQuestionDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -26,7 +26,7 @@ public class CustomEndUserAnswerValidationService {
 
     public Optional<ValidationError> checkAnswerIsValidForQuestion(CustomEndUserAnswerDto answer, CustomEndUserQuestion question) {
 
-        ValidationError.ValidationErrorBuilder validationErrorBuilder = ValidationError.builder();
+        ValidationError validationError = new ValidationError();
 
         CustomEndUserAnswerType customEndUserAnswerType = question.getCustomEndUserAnswerType();
 
@@ -39,10 +39,10 @@ public class CustomEndUserAnswerValidationService {
         switch (customEndUserAnswerType) {
 
             case NUMERIC:
-                return validateNumericInputs(question, validationErrorBuilder, answerValue, maxAnswerLength, minAnswerLength);
+                return validateNumericInputs(question, answerValue, maxAnswerLength, minAnswerLength);
 
             case EMAIL:
-                return validateEmailInput(question, validationErrorBuilder, answerValue);
+                return validateEmailInput(question, answerValue);
 
             case DATE:
                 //todo add validation for date values
@@ -52,65 +52,67 @@ public class CustomEndUserAnswerValidationService {
                 return Optional.empty();
 
             case ALPHA_NUMERIC:
-                return validateAlphaNumericInput(question, validationErrorBuilder, answerValue, maxAnswerLength, minAnswerLength);
+                return validateAlphaNumericInput(question, answerValue, maxAnswerLength, minAnswerLength);
 
             default:
                 throw new IllegalArgumentException("Unsupported operation..");
         }
     }
 
-    private Optional<ValidationError> validateEmailInput(CustomEndUserQuestion question, ValidationError.ValidationErrorBuilder validationErrorBuilder, String answerValue) {
+    private Optional<ValidationError> validateEmailInput(CustomEndUserQuestion question, String answerValue) {
 
         if (!isEmail(answerValue)) {
-            return Optional.ofNullable(validationErrorBuilder.
-                    questionId(question.getId())
-                    .errorMessage("Invalid format entered for email")
-                    .build());
+            ValidationError validationError = new ValidationError();
+            validationError.setErrorMessage("Invalid format entered for email");
+            validationError.setQuestionId(question.getId());
+            return Optional.ofNullable(validationError);
         }
 
         return Optional.empty();
 
     }
 
-    private Optional<ValidationError> validateNumericInputs(CustomEndUserQuestion question, ValidationError.ValidationErrorBuilder validationErrorBuilder, String answerValue, Long maxAnswerLength, Long minAnswerLength) {
+    private Optional<ValidationError> validateNumericInputs(CustomEndUserQuestion question, String answerValue, Long maxAnswerLength, Long minAnswerLength) {
         if (!IsNumeric(answerValue)) {
-            return Optional.ofNullable(validationErrorBuilder.
-                    questionId(question.getId())
-                    .errorMessage("Invalid Format. Expecting numbers only.")
-                    .build());
+            ValidationError validationError = new ValidationError();
+            validationError.setErrorMessage("Invalid Format. Expecting numbers only.");
+            validationError.setQuestionId(question.getId());
+            return Optional.ofNullable(validationError);
         }
 
         if (!isWithinCharacterLimit(answerValue, true, maxAnswerLength)) {
-            return Optional.ofNullable(validationErrorBuilder.
-                    questionId(question.getId())
-                    .errorMessage(String.format("Answer provided is more than expected word limit of %s", maxAnswerLength))
-                    .build());
+            ValidationError validationError = new ValidationError();
+            validationError.setErrorMessage(String.format("Answer provided is more than expected word limit of %s", maxAnswerLength));
+            validationError.setQuestionId(question.getId());
+            return Optional.ofNullable(validationError);
         }
 
         if (!isWithinCharacterLimit(answerValue, false, minAnswerLength)) {
-            return Optional.ofNullable(validationErrorBuilder.
-                    questionId(question.getId())
-                    .errorMessage(String.format("Answer provided is less than expected length of %s", maxAnswerLength))
-                    .build());
+            ValidationError validationError = new ValidationError();
+            validationError.setErrorMessage(String.format("Answer provided is less than expected length of %s", maxAnswerLength));
+            validationError.setQuestionId(question.getId());
+            return Optional.ofNullable(validationError);
+
         }
 
         return Optional.empty();
     }
 
-    private Optional<ValidationError> validateAlphaNumericInput(CustomEndUserQuestion question, ValidationError.ValidationErrorBuilder validationErrorBuilder, String answerValue, Long maxAnswerLength, Long minAnswerLength) {
+    private Optional<ValidationError> validateAlphaNumericInput(CustomEndUserQuestion question, String answerValue, Long maxAnswerLength, Long minAnswerLength) {
 
         if (!isWithinCharacterLimit(answerValue, true, maxAnswerLength)) {
-            return Optional.ofNullable(validationErrorBuilder.
-                    questionId(question.getId())
-                    .errorMessage(String.format("Answer provided is more than expected word limit of %s", maxAnswerLength))
-                    .build());
+            ValidationError validationError = new ValidationError();
+            validationError.setErrorMessage(String.format("Answer provided is more than expected word limit of %s", maxAnswerLength));
+            validationError.setQuestionId(question.getId());
+            return Optional.ofNullable(validationError);
+
         }
 
         if (!isWithinCharacterLimit(answerValue, false, minAnswerLength)) {
-            return Optional.ofNullable(validationErrorBuilder.
-                    questionId(question.getId())
-                    .errorMessage(String.format("Answer provided is less than expected length of %s", maxAnswerLength))
-                    .build());
+            ValidationError validationError = new ValidationError();
+            validationError.setErrorMessage(String.format("Answer provided is less than expected length of %s", maxAnswerLength));
+            validationError.setQuestionId(question.getId());
+            return Optional.ofNullable(validationError);
         }
 
         return Optional.empty();

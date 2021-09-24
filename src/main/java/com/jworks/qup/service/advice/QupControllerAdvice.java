@@ -1,7 +1,6 @@
 package com.jworks.qup.service.advice;
 
 import com.jworks.app.commons.advice.GeneralControllerAdvice;
-import com.jworks.app.commons.exceptions.BadRequestException;
 import com.jworks.app.commons.models.ApiResponseDto;
 import com.jworks.qup.service.exceptions.CustomEndUserFormException;
 import com.jworks.qup.service.models.CustomEndUserAnswerDto;
@@ -20,7 +19,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class QupControllerAdvice extends GeneralControllerAdvice {
 
-    @ExceptionHandler(BadRequestException.class)
+    @ExceptionHandler(CustomEndUserFormException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponseDto handleCustomEndUserFormException(CustomEndUserFormException ex) {
         log.error(ex.getMessage(), ex);

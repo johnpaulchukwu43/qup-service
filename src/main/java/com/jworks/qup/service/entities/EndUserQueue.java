@@ -3,7 +3,11 @@ package com.jworks.qup.service.entities;
 import com.jworks.qup.service.enums.QueueLocationType;
 import com.jworks.qup.service.enums.QueuePurpose;
 import com.jworks.qup.service.enums.QueueStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
@@ -18,7 +22,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@Builder
+@SuperBuilder
 @Indexed
 @NoArgsConstructor
 @AllArgsConstructor

@@ -1,8 +1,11 @@
 package com.jworks.qup.service.entities;
 
 import com.jworks.qup.service.enums.CustomEndUserAnswerType;
-import lombok.*;
-import org.springframework.stereotype.Indexed;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,8 +17,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Builder
-@Indexed
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -41,6 +43,6 @@ public class CustomEndUserQuestion extends BaseEntity implements Serializable {
     @JoinColumn(name = "form_id", referencedColumnName = "id", nullable = false)
     private CustomEndUserForm customEndUserForm;
 
-    @Transient
-    private boolean isRequired = minAnswerLength > 0;
+
+    private boolean isRequired;
 }

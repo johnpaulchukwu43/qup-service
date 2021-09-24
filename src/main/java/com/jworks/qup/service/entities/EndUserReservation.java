@@ -1,8 +1,11 @@
 package com.jworks.qup.service.entities;
 
 import com.jworks.qup.service.enums.ReservationStatus;
-import lombok.*;
-import org.springframework.stereotype.Indexed;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,8 +17,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Builder
-@Indexed
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)

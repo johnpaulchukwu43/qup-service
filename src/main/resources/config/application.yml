@@ -43,3 +43,4 @@ sendgrid:
   api-key: ${SENDGRID_API_KEY}
   base-url: ${SEND_GRID_API_URL}
   user-notification-template-code: ${SEND_GRID_USER_NOTIFICATION_TEMPLATE_CODE}
+  default-sender-address: ${SEND_GRID_USER_DEFAULT_ADDRESS}

@@ -1,8 +1,11 @@
 package com.jworks.qup.service.entities;
 
 import com.jworks.qup.service.enums.CustomEndUserFormType;
-import lombok.*;
-import org.springframework.stereotype.Indexed;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,8 +18,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Builder
-@Indexed
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -34,6 +36,7 @@ public class CustomEndUserForm extends BaseEntity implements Serializable {
     @Column
     private String description;
 
+    @Column(name = "form_code", nullable = false, length = 70)
     private String formCode;
 
 

@@ -1,6 +1,5 @@
 package com.jworks.qup.service.models;
 
-import com.jworks.qup.service.entities.BaseEntity;
 import com.jworks.qup.service.entities.EndUserQueue;
 import com.jworks.qup.service.enums.QueueLocationType;
 import com.jworks.qup.service.enums.QueuePurpose;
@@ -10,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Indexed;
 
 import java.io.Serializable;
 
@@ -21,10 +19,9 @@ import java.io.Serializable;
 
 @Data
 @Builder
-@Indexed
 @NoArgsConstructor
 @AllArgsConstructor
-public class EndUserQueueInfo extends BaseEntity implements Serializable {
+public class EndUserQueueInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
