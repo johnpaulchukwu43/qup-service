@@ -1,7 +1,10 @@
 package com.jworks.qup.service.entities;
 
-import lombok.*;
-import org.springframework.stereotype.Indexed;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,10 +15,9 @@ import java.util.List;
  * @since 17/12/2020
  */
 
-@Entity
 @Data
-@Builder
-@Indexed
+@Entity
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -26,26 +28,9 @@ import java.util.List;
         @Index(name = "USER_REFERENCE_INDEX", columnList = "user_reference"),
         @Index(name = "PHONE_NUMBER_INDEX", columnList = "phone_number")
 })
-public class EndUser extends BaseEntity implements Serializable {
+public class EndUser extends BaseEndUser implements Serializable {
+
     private static final long serialVersionUID = 1L;
-
-    @Column(name = "first_name", length = 50)
-    private String firstName;
-
-    @Column(name = "last_name", length = 50)
-    private String lastName;
-
-    @Column(name = "user_reference", nullable = false, length = 63, unique = true, updatable = false)
-    private String userReference;
-
-    @Column(name = "email_address", length = 60, unique = true)
-    private String emailAddress;
-
-    @Column(name = "password", length = 128, nullable = false)
-    private String password;
-
-    @Column(name = "phone_number", length = 20, unique = true)
-    private String phoneNumber;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "endUser")
     private List<EndUserQueue> endUserQueues;
