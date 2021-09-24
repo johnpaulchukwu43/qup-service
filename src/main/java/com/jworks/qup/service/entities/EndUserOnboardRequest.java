@@ -1,9 +1,12 @@
 package com.jworks.qup.service.entities;
 
 import com.jworks.qup.service.enums.EndUserOnBoardVerificationOption;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,32 +18,18 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Builder
-@Indexed
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "end_user_onboard_requests")
-public class EndUserOnboardRequest extends BaseEntity implements Serializable {
+public class EndUserOnboardRequest extends BaseEndUser implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "first_name", length = 50)
-    private String firstName;
-
-    @Column(name = "last_name", length = 50)
-    private String lastName;
 
     @Column(name = "verification_code", nullable = false, length = 70, unique = true, updatable = false)
     private String verificationCode;
-
-    @Column(name = "email_address", unique = true)
-    private String emailAddress;
-
-    @Column(name = "password", length = 128, nullable = false)
-    private String password;
-
-    @Column(name = "phone_number", length = 20, unique = true)
-    private String phoneNumber;
 
     @Column(name = "is_verification_complete",nullable = false)
     @ColumnDefault("0")
@@ -53,8 +42,5 @@ public class EndUserOnboardRequest extends BaseEntity implements Serializable {
     @Column(name = "verification_option", nullable = false,length = 20)
     @Enumerated(EnumType.STRING)
     private EndUserOnBoardVerificationOption endUserOnBoardVerificationOption;
-
-    @Column(name = "user_reference", nullable = false, length = 70, unique = true, updatable = false)
-    private String userReference;
 
 }

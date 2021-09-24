@@ -9,6 +9,7 @@ spring:
   session:
     store-type: none
 
+
 qup:
   service:
     datasource:
@@ -32,3 +33,13 @@ qup:
     jwt:
       secret: ${APP_JWT_SECRET}
       expiration-period-milli-seconds: ${APP_JWT_EXPIRATION_PERIOD_SECONDS}
+    email:
+      sender:
+        name: ${EMAIL_SENDER_NAME}
+        email-address: ${EMAIL_SENDER_ADDRESS}
+
+
+sendgrid:
+  api-key: ${SENDGRID_API_KEY}
+  base-url: ${SEND_GRID_API_URL}
+  user-notification-template-code: ${SEND_GRID_USER_NOTIFICATION_TEMPLATE_CODE}

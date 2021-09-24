@@ -7,8 +7,10 @@ import com.jworks.app.commons.models.ApiResponseDto;
 import com.jworks.app.commons.models.PageOutput;
 import com.jworks.app.commons.utils.ApiUtil;
 import com.jworks.app.commons.utils.RestConstants;
-import com.jworks.qup.service.enums.GetReservationAction;
-import com.jworks.qup.service.models.*;
+import com.jworks.qup.service.models.ClientSearchReservationDto;
+import com.jworks.qup.service.models.CreateReservationDto;
+import com.jworks.qup.service.models.EndUserReservationDto;
+import com.jworks.qup.service.models.EndUserReservationStatusDto;
 import com.jworks.qup.service.services.EndUserReservationService;
 import com.jworks.qup.service.utils.HasAuthority;
 import lombok.RequiredArgsConstructor;
@@ -119,7 +121,7 @@ public class EndUserReservationController {
 
     @PutMapping("{reservationCode}/change-status")
     @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
-    public ResponseEntity<ApiResponseDto> updateReservationStatus(@Validated @RequestBody EndUserReservationStatusDto endUserReservationStatusDto, @PathVariable String reservationCode) throws SystemServiceException, NotFoundRestApiException, UnProcessableOperationException {
+    public ResponseEntity<ApiResponseDto> updateReservationStatus(@Validated @RequestBody EndUserReservationStatusDto endUserReservationStatusDto, @PathVariable String reservationCode) throws SystemServiceException, NotFoundRestApiException {
 
          endUserReservationService.updateReservationStatus(endUserReservationStatusDto, reservationCode);
 

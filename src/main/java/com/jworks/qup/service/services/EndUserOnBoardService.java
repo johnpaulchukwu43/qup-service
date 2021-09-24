@@ -9,6 +9,7 @@ import com.jworks.app.commons.services.impl.ServiceBluePrintImpl;
 import com.jworks.app.commons.utils.ReferenceGenerator;
 import com.jworks.qup.service.entities.EndUserOnboardRequest;
 import com.jworks.qup.service.enums.EndUserOnBoardVerificationOption;
+import com.jworks.qup.service.models.EndUserNotificationTemplateCode;
 import com.jworks.qup.service.models.EndUserOnboardRequestDto;
 import com.jworks.qup.service.models.EndUserVerifyDto;
 import com.jworks.qup.service.repositories.EndUserOnboardRequestRepository;
@@ -40,12 +41,15 @@ public class EndUserOnBoardService extends ServiceBluePrintImpl<EndUserOnboardRe
 
     private final EndUserService endUserService;
 
+    private final EventNotifyService eventNotifyService;
+
     @Autowired
-    public EndUserOnBoardService(EndUserOnboardRequestRepository endUserOnboardRequestRepository, PasswordEncoder passwordEncoder, EndUserService endUserService) {
+    public EndUserOnBoardService(EndUserOnboardRequestRepository endUserOnboardRequestRepository, PasswordEncoder passwordEncoder, EndUserService endUserService, EventNotifyService eventNotifyService) {
         super(endUserOnboardRequestRepository);
         this.endUserOnboardRequestRepository = endUserOnboardRequestRepository;
         this.passwordEncoder = passwordEncoder;
         this.endUserService = endUserService;
+        this.eventNotifyService = eventNotifyService;
     }
 
 
@@ -85,7 +89,7 @@ public class EndUserOnBoardService extends ServiceBluePrintImpl<EndUserOnboardRe
 
         endUserOnboardRequest = save(endUserOnboardRequest);
 
-        //todo send email or sms async
+        eventNotifyService.broadCastEndUserEmailNotification(endUserOnboardRequest, EndUserNotificationTemplateCode.USER_EMAIL_VERIFICATION_NOTIFICATION);
 
         return endUserOnboardRequest.getUserReference();
     }
