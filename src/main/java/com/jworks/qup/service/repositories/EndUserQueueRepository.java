@@ -21,19 +21,19 @@ import java.sql.Timestamp;
  */
 
 @Repository
-public interface EndUserQueueRepository extends BaseRepository<EndUserQueue,Long> {
+public interface EndUserQueueRepository extends BaseRepository<EndUserQueue> {
 
     @Query(
-            "SELECT new com.jworks.qup.service.models.EndUserQueueDto(euq) FROM EndUserQueue euq " +
+            "SELECT euq FROM EndUserQueue euq " +
                     "WHERE ((:queueStatus IS NULL) OR (euq.queueStatus = :queueStatus))" +
-                    "AND ((:queueCode IS NULL) OR (euq.queueCode = :queueCode))" +
-                    "AND ((:createdOn IS NULL) OR (euq.createdAt = :createdOn))" +
-                    "AND ((:expiryDate IS NULL) OR (euq.expirationDate = :expiryDate))" +
-                    "AND ((:queuePurpose IS NULL) OR (euq.queuePurpose = :queuePurpose))"+
-                    "AND (euq.endUser.userReference = :userReference)"
+                    " AND ((:queueCode IS NULL) OR (euq.queueCode = :queueCode))" +
+                    " AND ((:createdOn IS NULL) OR (euq.createdAt = :createdOn))" +
+                    " AND ((:expiryDate IS NULL) OR (euq.expirationDate = :expiryDate))" +
+                    " AND ((:queuePurpose IS NULL) OR (euq.queuePurpose = :queuePurpose))"+
+                    " AND (euq.endUser.userReference = :userReference)"
 
     )
-    Page<EndUserQueueDto> getAllQueuesByUserReferenceFilteredBy(
+    Page<EndUserQueue> getAllQueuesByUserReferenceFilteredBy(
             @Param("queueStatus") QueueStatus queueStatus,
             @Param("queueCode") String queueCode,
             @Param("createdOn") Timestamp createdOn,
@@ -44,12 +44,12 @@ public interface EndUserQueueRepository extends BaseRepository<EndUserQueue,Long
     );
 
     @Query(
-            "SELECT new com.jworks.qup.service.models.EndUserQueueInfo(euq) FROM EndUserQueue euq " +
+            "SELECT euq FROM EndUserQueue euq " +
                     "WHERE ((:businessName IS NULL) OR (euq.business.name LIKE %:businessName%))" +
                     "AND ((:queueCode IS NULL) OR (euq.queueCode LIKE %:queueCode%))"+
                     "AND ((:queueName IS NULL) OR (euq.name LIKE %:queueName%))"
     )
-    Page<EndUserQueueInfo> getAllQueueInfoFilteredBy(
+    Page<EndUserQueue> getAllQueueInfoFilteredBy(
             @Param("queueCode") String queueCode,
             @Param("businessName") String businessName,
             @Param("queueName") String queueName,

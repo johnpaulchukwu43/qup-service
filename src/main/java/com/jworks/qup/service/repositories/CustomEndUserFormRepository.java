@@ -2,7 +2,6 @@ package com.jworks.qup.service.repositories;
 
 import com.jworks.app.commons.repositories.BaseRepository;
 import com.jworks.qup.service.entities.CustomEndUserForm;
-import com.jworks.qup.service.models.CustomEndUserFormDto;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -17,11 +16,11 @@ import java.util.Optional;
  */
 
 @Repository
-public interface CustomEndUserFormRepository extends BaseRepository<CustomEndUserForm, Long> {
+public interface CustomEndUserFormRepository extends BaseRepository<CustomEndUserForm> {
 
 
-    @Query("SELECT new com.jworks.qup.service.models.CustomEndUserFormDto(userForm) FROM CustomEndUserForm userForm WHERE userForm.endUserQueue.id = :queueId")
-    List<CustomEndUserFormDto> getFormDtoByQueueId(@Param("queueId") Long queueId);
+    @Query("SELECT userForm FROM CustomEndUserForm userForm WHERE userForm.endUserQueue.id = :queueId")
+    List<CustomEndUserForm> getFormDtoByQueueId(@Param("queueId") Long queueId);
 
     @Query("SELECT userForm FROM CustomEndUserForm userForm WHERE userForm.endUserQueue.id = :queueId")
     List<CustomEndUserForm> getFormByQueueId(@Param("queueId") Long queueId);

@@ -12,7 +12,7 @@ import java.util.Optional;
  */
 
 @Repository
-public interface BusinessRepository extends BaseRepository<Business,Long> {
+public interface BusinessRepository extends BaseRepository<Business> {
 
     Optional<Business> findByName(String name);
     Optional<Business> findByEmailAddress(String email);

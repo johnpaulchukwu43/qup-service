@@ -156,7 +156,7 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
                 queueStatus, clientSearchQueueDto.getQueueCode(),
                 createdOn, queuePurpose, clientSearchQueueDto.getUserReference(),
                 expiryDate, pageRequest
-        );
+        ).map(EndUserQueueDto::new);
 
         return  PageOutput.fromPage(endUserQueues);
 
@@ -173,7 +173,7 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
                 clientSearchQueueInfo.getBusinessName(),
                 clientSearchQueueInfo.getQueueName(),
                 paginationRequest
-        );
+        ).map(EndUserQueueInfo::new);
 
         return PageOutput.fromPage(queueInfos);
     }

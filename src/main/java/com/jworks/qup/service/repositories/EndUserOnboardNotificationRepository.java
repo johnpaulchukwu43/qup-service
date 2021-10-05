@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface EndUserOnboardNotificationRepository extends BaseRepository<EndUserOnboardNotification, Long> {
+public interface EndUserOnboardNotificationRepository extends BaseRepository<EndUserOnboardNotification> {
 
 }

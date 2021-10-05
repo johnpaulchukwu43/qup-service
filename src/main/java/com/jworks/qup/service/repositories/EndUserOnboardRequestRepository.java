@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 
 @Repository
-public interface EndUserOnboardRequestRepository extends BaseRepository<EndUserOnboardRequest,Long> {
+public interface EndUserOnboardRequestRepository extends BaseRepository<EndUserOnboardRequest> {
 
     Optional<IdProjection> findIdByEmailAddress(String emailAddress);
 

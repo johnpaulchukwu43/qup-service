@@ -117,7 +117,7 @@ public class EndUserReservationService extends ServiceBluePrintImpl<EndUserReser
                         validatedCreatedOnStartDate,validatedCreatedOnEndDate,
                         clientSearchReservationDto.getQueueCode(),reservationStatus,
                         userReference,pageRequest
-                );
+                ).map(EndUserReservationDto::new);
                 break;
 
             case BY_QUEUE_OWNER:
@@ -126,7 +126,7 @@ public class EndUserReservationService extends ServiceBluePrintImpl<EndUserReser
                         validatedCreatedOnStartDate,validatedCreatedOnEndDate,
                         clientSearchReservationDto.getQueueCode(),reservationStatus,
                         userReference,pageRequest
-                );
+                ).map(EndUserReservationDto::new);
                 break;
 
              default:

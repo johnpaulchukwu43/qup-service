@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface EndUserPoolConfigRepository extends BaseRepository<EndUserPoolConfig,Long> {
+public interface EndUserPoolConfigRepository extends BaseRepository<EndUserPoolConfig> {
 
 }
