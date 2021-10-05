@@ -37,7 +37,25 @@ qup:
       sender:
         name: ${EMAIL_SENDER_NAME}
         email-address: ${EMAIL_SENDER_ADDRESS}
-    initialize-default-notification-templates: ${QUP_SERVICE_INITIALIZE_DEFAULT_NOTIFICATION_TEMPLATE}
+    initialize-default-notification-templates: true
+
+event:
+  multicaster:
+    max:
+      pool-size: ${EVENT_MULTICASTER_MAX_POOL_SIZE}
+    core:
+      pool-size: ${EVENT_MULTICASTER_CORE_POOL_SIZE}
+    queue:
+      capacity: ${EVENT_MULTICASTER_QUEUE_CAPACITY}
+
+async:
+  executor:
+    max:
+      pool-size: ${ASYNC_EXECUTOR_MAX_POOL_SIZE}
+    core:
+      pool-size: ${ASYNC_EXECUTOR_CORE_POOL_SIZE}
+    queue:
+      capacity: ${ASYNC_EXECUTOR_QUEUE_CAPACITY}
 
 
 sendgrid:
