@@ -26,7 +26,7 @@ qup:
       hibernate:
         show-sql: ${APP_DB_SHOW_SQL}
         ddl-auto: ${APP_DB_DDL_AUTO}
-        dialect: org.hibernate.dialect.MySQL55Dialect
+        dialect: ${APP_DB_DIALECT:org.hibernate.dialect.MySQL55Dialect}
     liquibase:
       enable: ${APP_LIQUIBASE_ENABLED}
       changelog: classpath:config/liquibase/index.xml

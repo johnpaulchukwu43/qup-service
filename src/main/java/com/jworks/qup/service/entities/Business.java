@@ -22,7 +22,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "businesses",
         indexes = {
-        @Index(name = "STATUS_INDEX", columnList = "status"),
+        @Index(name = "BUSINESS_STATUS_INDEX", columnList = "status"),
         @Index(name = "BUSINESS_NAME_IDX", columnList = "name")
 })
 public class Business extends BaseEntity implements Serializable {

@@ -25,6 +25,7 @@ import java.util.Set;
 
 import static com.jworks.app.commons.utils.ReferenceGenerator.INTENT_QUEUE_FORM;
 import static com.jworks.qup.service.enums.CustomEndUserFormType.toCustomEndUserFormType;
+import java.util.stream.Collectors;
 
 
 /**
@@ -119,7 +120,7 @@ public class CustomEndUserFormService extends ServiceBluePrintImpl<CustomEndUser
         if (!queue.getEndUser().getUserReference().equals(userReference))
             throw new UnauthorizedUserException("Cannot get forms for queue belonging to another user.");
 
-        return customEndUserFormRepository.getFormDtoByQueueId(queueId);
+        return customEndUserFormRepository.getFormDtoByQueueId(queueId).stream().map(CustomEndUserFormDto::new).collect(Collectors.toList());
     }
 
     public CustomEndUserFormDto getFormByCode(String code, String userReference) throws UnProcessableOperationException {

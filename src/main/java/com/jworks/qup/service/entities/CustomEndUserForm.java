@@ -25,7 +25,7 @@ import java.util.List;
 @Table(name = "custom_end_user_forms", indexes = {
         @Index(name = "FORM_NAME_IDX", columnList = "name"),
         @Index(name = "FORM_CODE_IDX", columnList = "form_code"),
-        @Index(name = "STATUS_INDEX", columnList = "status")
+        @Index(name = "FORM_STATUS_INDEX", columnList = "status")
 })
 public class CustomEndUserForm extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
