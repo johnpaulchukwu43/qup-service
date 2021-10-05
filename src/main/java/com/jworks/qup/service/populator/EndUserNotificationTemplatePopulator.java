@@ -25,7 +25,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@ConditionalOnProperty(prefix = "dispute.manager", name = "initialize-default-notification-templates")
+@ConditionalOnProperty(prefix = "qup.service", name = "initialize-default-notification-templates")
 public class EndUserNotificationTemplatePopulator {
 
     private final EndUserNotificationTemplateService endUserNotificationTemplateService;

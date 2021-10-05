@@ -37,6 +37,7 @@ qup:
       sender:
         name: ${EMAIL_SENDER_NAME}
         email-address: ${EMAIL_SENDER_ADDRESS}
+    initialize-default-notification-templates: ${QUP_SERVICE_INITIALIZE_DEFAULT_NOTIFICATION_TEMPLATE}
 
 
 sendgrid:

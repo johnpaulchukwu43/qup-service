@@ -49,7 +49,7 @@ public class EndUserController {
     private final EndUserAuthenticationService endUserAuthenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponseDto> createEndUserRequest(@Validated @RequestBody EndUserOnboardRequestDto endUserOnboardRequestDto) throws SystemServiceException, NotFoundRestApiException {
+    public ResponseEntity<ApiResponseDto> createEndUserRequest(@Validated @RequestBody EndUserOnboardRequestDto endUserOnboardRequestDto) throws SystemServiceException {
 
         String userReference = endUserOnBoardService.performUserOnboardProcess(endUserOnboardRequestDto);
 
@@ -60,7 +60,7 @@ public class EndUserController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<ApiResponseDto> verifyEndUser(@Validated @RequestBody EndUserVerifyDto endUserVerifyDto) throws SystemServiceException, NotFoundRestApiException, UnProcessableOperationException {
+    public ResponseEntity<ApiResponseDto> verifyEndUser(@Validated @RequestBody EndUserVerifyDto endUserVerifyDto) throws SystemServiceException, UnProcessableOperationException {
 
          endUserOnBoardService.performUserVerification(endUserVerifyDto);
 
@@ -80,7 +80,7 @@ public class EndUserController {
 
         endUserService.resetUserPassword(passwordResetDto,userReference);
 
-        String whatWasUpdated = String.format("password for user with reference: %s was updated.", userReference);
+        String whatWasUpdated = String.format("password for user with reference: %s.", userReference);
 
         return ApiUtil.updated(whatWasUpdated);
 
