@@ -1,7 +1,9 @@
 package com.jworks.qup.service.controllers;
 
 
+import com.jworks.qup.service.entities.EndUser;
 import com.jworks.qup.service.framework.ResourceTestSupport;
+import com.jworks.qup.service.providers.impl.EndUserProvider;
 import com.jworks.qup.service.security.AuthenticationMocks;
 import com.jworks.qup.service.security.MockSecurityContext;
 import java.math.BigDecimal;
@@ -10,12 +12,15 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -35,11 +40,22 @@ public class AbstractResourceTest extends ResourceTestSupport {
 
     protected static final String RUN_ALL_TESTS_PROFILE = "full"; // Includes slow running integration tests in tests to run.
 
+    @Autowired
+    private EndUserProvider endUserProvider;
+
     public AbstractResourceTest(Class<?> controllerType) {
         super(controllerType);
+    }
 
-//        SimpleModule simpleModule = new SimpleModule();
-//        objectMapper.registerModule(simpleModule);
+    @PostConstruct
+    public void init() {
+        // Save admin user to db.
+        final String userReference = ((User) AuthenticationMocks.adminAuthentication().getPrincipal()).getUsername();
+        if (!endUserProvider.getRepository().existsByUserReference(userReference)) {
+            EndUser endUser = endUserProvider.provide();
+            endUser.setUserReference(userReference);
+            endUserProvider.save(endUser);
+        }
     }
 
     // Subclasses can extend this to include additional set up logic

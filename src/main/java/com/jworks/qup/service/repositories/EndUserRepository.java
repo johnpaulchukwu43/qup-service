@@ -15,6 +15,7 @@ import java.util.Optional;
 @Repository
 public interface EndUserRepository extends BaseRepository<EndUser> {
 
+    boolean existsByUserReference(String userReference);
     Optional<IdProjection> findIdByUserReference(String userReference);
     Optional<IdProjection> findIdByPhoneNumber(String phoneNumber);
     Optional<IdProjection> findIdByPhoneNumberAndIdNot(String phoneNumber, Long id);

@@ -1,10 +1,13 @@
-package com.jworks.qup.service.providers.entity;
+package com.jworks.qup.service.providers.impl;
 
-import com.jworks.app.commons.repositories.BaseRepository;
 import com.jworks.qup.service.entities.BusinessCategory;
+import com.jworks.qup.service.models.BusinessCategoryDto;
+import com.jworks.qup.service.providers.DtoProvider;
 import com.jworks.qup.service.repositories.BusinessCategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import com.jworks.qup.service.providers.EntityProvider;
+import static com.jworks.qup.service.providers.EntityProvider.faker;
 
 /**
  * @author bodmas
@@ -12,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @AllArgsConstructor
-public class BusinessCategoryProvider implements EntityProvider<BusinessCategory> {
+public class BusinessCategoryProvider implements EntityProvider<BusinessCategory>, DtoProvider<BusinessCategoryDto> {
 
     private final BusinessCategoryRepository businessCategoryRepository;
 
@@ -21,6 +24,13 @@ public class BusinessCategoryProvider implements EntityProvider<BusinessCategory
         BusinessCategory businessCategory = BusinessCategory.builder()
                 .description(faker.company().catchPhrase()).name(faker.company().name()).build();
         return businessCategory;
+    }
+
+    @Override
+    public BusinessCategoryDto provideDto() {
+        BusinessCategoryDto businessCategoryDto = BusinessCategoryDto.builder()
+                .description(faker.company().catchPhrase()).name(faker.company().name()).build();
+        return businessCategoryDto;
     }
 
     @Override

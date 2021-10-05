@@ -21,6 +21,7 @@ import java.util.Optional;
 public interface EndUserReservationRepository extends BaseRepository<EndUserReservation> {
 
     Optional<EndUserReservation> findByReservationCode(String reservationCode);
+    boolean existsByReservationCode(String reservationCode);
 
     Boolean existsByEndUserUserReferenceAndEndUserQueueIdAndReservationStatusNot(String userReference, Long queueId, ReservationStatus reservationStatus);
 

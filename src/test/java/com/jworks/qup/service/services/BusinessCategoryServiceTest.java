@@ -6,7 +6,7 @@
 package com.jworks.qup.service.services;
 
 import com.jworks.qup.service.entities.BusinessCategory;
-import com.jworks.qup.service.providers.entity.BusinessCategoryProvider;
+import com.jworks.qup.service.providers.impl.BusinessCategoryProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,8 +29,7 @@ public class BusinessCategoryServiceTest extends AbstractServiceTest {
 
     @Test
     public void testCreateBusinessCategory() throws Exception {
-        BusinessCategory businessCategory = businessCategoryProvider.provide();
-        businessCategoryProvider.save(businessCategory);
+        BusinessCategory businessCategory = businessCategoryProvider.provideAndSave();
         Assertions.assertTrue(businessCategoryProvider.getRepository().existsByName(businessCategory.getName()));
     }
 }
