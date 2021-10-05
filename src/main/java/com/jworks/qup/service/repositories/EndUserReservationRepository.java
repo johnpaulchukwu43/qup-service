@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 
 @Repository
-public interface EndUserReservationRepository extends BaseRepository<EndUserReservation,Long> {
+public interface EndUserReservationRepository extends BaseRepository<EndUserReservation> {
 
     Optional<EndUserReservation> findByReservationCode(String reservationCode);
 

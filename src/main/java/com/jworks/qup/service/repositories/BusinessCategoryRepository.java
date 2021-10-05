@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface BusinessCategoryRepository extends BaseRepository<BusinessCategory,Long> {
+public interface BusinessCategoryRepository extends BaseRepository<BusinessCategory> {
 
 }

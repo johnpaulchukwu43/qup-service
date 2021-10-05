@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 
 @Repository
-public interface CustomEndUserFormRepository extends BaseRepository<CustomEndUserForm, Long> {
+public interface CustomEndUserFormRepository extends BaseRepository<CustomEndUserForm> {
 
 
     @Query("SELECT new com.jworks.qup.service.models.CustomEndUserFormDto(userForm) FROM CustomEndUserForm userForm WHERE userForm.endUserQueue.id = :queueId")

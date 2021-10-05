@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface CustomEndUserAnswerRepository extends BaseRepository<CustomEndUserAnswer, Long> {
+public interface CustomEndUserAnswerRepository extends BaseRepository<CustomEndUserAnswer> {
 }

@@ -21,7 +21,7 @@ import java.sql.Timestamp;
  */
 
 @Repository
-public interface EndUserQueueRepository extends BaseRepository<EndUserQueue,Long> {
+public interface EndUserQueueRepository extends BaseRepository<EndUserQueue> {
 
     @Query(
             "SELECT new com.jworks.qup.service.models.EndUserQueueDto(euq) FROM EndUserQueue euq " +

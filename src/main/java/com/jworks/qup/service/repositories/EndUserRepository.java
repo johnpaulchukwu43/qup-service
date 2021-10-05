@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 
 @Repository
-public interface EndUserRepository extends BaseRepository<EndUser,Long> {
+public interface EndUserRepository extends BaseRepository<EndUser> {
 
     Optional<IdProjection> findIdByUserReference(String userReference);
     Optional<IdProjection> findIdByPhoneNumber(String phoneNumber);

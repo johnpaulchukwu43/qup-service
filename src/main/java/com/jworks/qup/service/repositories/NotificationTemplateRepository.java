@@ -14,7 +14,7 @@ import java.util.Optional;
  */
 
 @Repository
-public interface NotificationTemplateRepository extends BaseRepository<EndUserNotificationTemplate, Long> {
+public interface NotificationTemplateRepository extends BaseRepository<EndUserNotificationTemplate> {
 
     Optional<EndUserNotificationTemplate> findByCodeAndNotificationType(EndUserNotificationTemplateCode endUserNotificationTemplateCode, NotificationType notificationType);
 
