@@ -27,10 +27,14 @@ public class ClientSearchQueueDto implements Serializable {
 
     private String queuePurpose;
 
-    private String createdOn;
+    private String createdOnStartDate;
+
+    private String createdOnEndDate;
 
     private String userReference;
 
-    private String expiryDate;
+    private String expiryStartDate;
+
+    private String expiryEndDate;
 
 }

@@ -18,6 +18,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 /**
  * @author Johnpaul Chukwu.
@@ -60,6 +63,12 @@ public class BusinessService extends ServiceBluePrintImpl<Business, BusinessDto>
         business.setEntityStatus(EntityStatus.ACTIVE);
 
         return new BusinessDto(save(business));
+    }
+
+    public List<BusinessDto> getBusinessBelongingToUser(String userReference) {
+
+        return businessRepository.findByEndUserUserReference(userReference)
+                .stream().map(BusinessDto::new).collect(Collectors.toList());
     }
 
     private void ensureNameDoesNotExist(String name) throws DuplicateEntryException {

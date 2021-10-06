@@ -23,6 +23,8 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class BusinessDto implements Serializable {
 
+    private Long id;
+
     private String name;
 
     private String description;

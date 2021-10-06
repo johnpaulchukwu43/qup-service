@@ -8,11 +8,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * @author Johnpaul Chukwu.
@@ -31,9 +30,9 @@ public class UpdateEndUserQueueDto implements Serializable {
     @PositiveOrZero(message = "maxNumberOfUsersOnQueue cannot be less than 0")
     private Long maxNumberOfUsersOnQueue;
 
-    @Future
-    @NotNull(message =  "maxNumberOfUsersInPool is required")
-    private LocalDateTime expirationDate;
+    @NotBlank
+    @NotNull(message = "expirationDateTime is required")
+    private String expirationDateTime;
 
     @PositiveOrZero(message = "maxNumberOfUsersInPool cannot be less than 0")
     private Long maxNumberOfUsersInPool;

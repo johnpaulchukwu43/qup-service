@@ -25,8 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-import static com.jworks.app.commons.utils.AppUtil.toLocalDateTime;
+import static com.jworks.app.commons.utils.AppUtil.validateDatePair;
+import static com.jworks.app.commons.utils.AppUtil.validateTransactionDate;
 import static com.jworks.app.commons.utils.ReferenceGenerator.INTENT_QUEUE_REFERENCE;
 import static com.jworks.qup.service.enums.QueueStatus.toQueueStatus;
 
@@ -54,13 +56,16 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
     @Transactional
     public EndUserQueueDto createQueue(CreateEndUserQueueDto createEndUserQueueDto, String userReference) throws NotFoundRestApiException, SystemServiceException {
 
+
         EndUser ownerOfQueue = endUserService.getUserByUserReference(userReference);
+
+        LocalDateTime expirationDateTime = parseExpirationDateTime(createEndUserQueueDto.getExpirationDateTime());
 
         EndUserQueue endUserQueue = EndUserQueue.builder()
                 .name(createEndUserQueueDto.getQueueName())
                 .capacity(createEndUserQueueDto.getMaxNumberOfUsersOnQueue())
                 .endUser(ownerOfQueue)
-                .expirationDate(createEndUserQueueDto.getExpirationDate())
+                .expirationDate(expirationDateTime)
                 .queueCode(ReferenceGenerator.generateRef(INTENT_QUEUE_REFERENCE))
                 .queueLocationType(QueueLocationType.valueOf(createEndUserQueueDto.getQueueLocationType()))
                 .queueLocationValue(createEndUserQueueDto.getQueueLocationValue())
@@ -88,12 +93,30 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
 
         if(!userReference.equals(endUserQueue.getEndUser().getUserReference())) throw new UnauthorizedUserException("Cannot update queue belonging to another user.");
 
-        endUserQueue.setExpirationDate(updateEndUserQueueDto.getExpirationDate());
+        LocalDateTime expirationDateTime = parseExpirationDateTime(updateEndUserQueueDto.getExpirationDateTime());
+
+        endUserQueue.setExpirationDate(expirationDateTime);
         //todo what happens if we try to update the capacity to a value less than the current number of users on the queue?
         endUserQueue.setCapacity(updateEndUserQueueDto.getMaxNumberOfUsersOnQueue());
         //todo what happens if we try to update the capacity to a value less than the current number of users on the pool?
         endUserQueue.getPoolConfig().setCapacity(updateEndUserQueueDto.getMaxNumberOfUsersInPool());
         save(endUserQueue);
+    }
+
+    private LocalDateTime parseExpirationDateTime(String expiryDateTimeString) throws BadRequestException {
+
+        LocalDateTime expirationDateTime;
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        try {
+            expirationDateTime = LocalDateTime.parse(expiryDateTimeString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        } catch (Exception ex) {
+            log.error("exception occurred:", ex);
+            throw new BadRequestException(String.format("Invalid date passed: %s. Expecting date with format: yyyy-MM-dd HH:mm:ss", expiryDateTimeString));
+        }
+
+        if (currentDateTime.isAfter(expirationDateTime))
+            throw new BadRequestException("Expiration date time can not be in the past.");
+        return expirationDateTime;
     }
 
     public void changeQueueStatus(Long queueId, EndUserQueueStatusDto endUserQueueStatusDto, String userReference) throws NotFoundRestApiException, SystemServiceException {
@@ -128,8 +151,8 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
 
         QueueStatus queueStatus = null;
         QueuePurpose queuePurpose = null;
-        Timestamp createdOn = null;
-        Timestamp expiryDate = null;
+        Timestamp validatedCreatedOnStartDate = null;
+        Timestamp validatedCreatedOnEndDate = null;
 
         if(StringUtils.isNotBlank(clientSearchQueueDto.getQueueStatus())){
             queueStatus = toQueueStatus(clientSearchQueueDto.getQueueStatus());
@@ -139,23 +162,24 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
             queuePurpose = QueuePurpose.toQueuePurpose(clientSearchQueueDto.getQueuePurpose());
         }
 
-        if(StringUtils.isNotBlank(clientSearchQueueDto.getQueuePurpose())){
-            LocalDateTime localDateTime = toLocalDateTime(clientSearchQueueDto.getCreatedOn(), log);
-            if(localDateTime == null) throw new BadRequestException(String.format("Invalid date format for createdOn:  %s", clientSearchQueueDto.getQueuePurpose()));
-            createdOn = Timestamp.valueOf(localDateTime);
-        }
+        LocalDateTime createdOnStartDate = validateTransactionDate(clientSearchQueueDto.getCreatedOnStartDate(), true);
+        LocalDateTime createdOnEndDate = validateTransactionDate(clientSearchQueueDto.getCreatedOnEndDate(), false);
+        LocalDateTime expiryStartDate = validateTransactionDate(clientSearchQueueDto.getExpiryStartDate(), true);
+        LocalDateTime expiryEndDate = validateTransactionDate(clientSearchQueueDto.getExpiryEndDate(), false);
 
-        if(StringUtils.isNotBlank(clientSearchQueueDto.getExpiryDate())){
-            LocalDateTime localDateTime = toLocalDateTime(clientSearchQueueDto.getCreatedOn(), log);
-            if(localDateTime == null) throw new BadRequestException(String.format("Invalid date format for expiryDate:  %s", clientSearchQueueDto.getExpiryDate()));
-            expiryDate = Timestamp.valueOf(localDateTime);
-        }
+
+        validateDatePair(createdOnStartDate, createdOnEndDate);
+
+        if (createdOnStartDate != null) validatedCreatedOnStartDate = Timestamp.valueOf(createdOnStartDate);
+        if (createdOnEndDate != null) validatedCreatedOnEndDate = Timestamp.valueOf(createdOnEndDate);
 
 
         Page<EndUserQueueDto> endUserQueues = endUserQueueRepository.getAllQueuesByUserReferenceFilteredBy(
                 queueStatus, clientSearchQueueDto.getQueueCode(),
-                createdOn, queuePurpose, clientSearchQueueDto.getUserReference(),
-                expiryDate, pageRequest
+                queuePurpose, clientSearchQueueDto.getUserReference(),
+                validatedCreatedOnStartDate, validatedCreatedOnEndDate,
+                expiryStartDate, expiryEndDate,
+                pageRequest
         ).map(EndUserQueueDto::new);
 
         return  PageOutput.fromPage(endUserQueues);

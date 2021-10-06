@@ -4,6 +4,7 @@ import com.jworks.app.commons.repositories.BaseRepository;
 import com.jworks.qup.service.entities.Business;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -17,4 +18,6 @@ public interface BusinessRepository extends BaseRepository<Business> {
     Optional<Business> findByName(String name);
     Optional<Business> findByEmailAddress(String email);
     Optional<Business> findByPhoneNumber(String phoneNumber);
+
+    List<Business> findByEndUserUserReference(String userReference);
 }

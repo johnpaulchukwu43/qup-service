@@ -63,14 +63,21 @@ public class EndUserQueueController {
                                                                   @RequestParam(name = "queueStatus", required = false) String queueStatus,
                                                                   @RequestParam(name = "queueCode", required = false) String queueCode,
                                                                   @RequestParam(name = "queuePurpose", required = false) String queuePurpose,
-                                                                  @RequestParam(name = "createdOn", required = false) String createdOn, @PathVariable String userReference) throws SystemServiceException {
+                                                                  @RequestParam(name = "createdOnStartDate", required = false) String createdOnStartDate,
+                                                                  @RequestParam(name = "createdOnEndDate", required = false) String createdOnEndDate,
+                                                                  @RequestParam(name = "expiryStartDate", required = false) String expiryStartDate,
+                                                                  @RequestParam(name = "expiryEndDate", required = false) String expiryEndDate,
+                                                                  @PathVariable String userReference) throws SystemServiceException {
 
         String loggedInUserReference = ApiUtil.getLoggedInUser();
 
         if(!loggedInUserReference.equalsIgnoreCase(userReference)) throw new UnauthorizedUserException("Cannot access queues belonging to another user. Confirm the userReference passed is yours.");
 
         ClientSearchQueueDto clientSearchQueueDto = ClientSearchQueueDto.builder()
-                .createdOn(createdOn)
+                .createdOnStartDate(createdOnStartDate)
+                .createdOnEndDate(createdOnEndDate)
+                .expiryStartDate(expiryStartDate)
+                .expiryEndDate(expiryEndDate)
                 .queueStatus(queueStatus)
                 .queueCode(queueCode)
                 .queuePurpose(queuePurpose)

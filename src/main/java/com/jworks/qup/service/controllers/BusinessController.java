@@ -16,11 +16,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author Johnpaul Chukwu.
@@ -48,5 +48,20 @@ public class BusinessController {
         BusinessDto business = businessService.createBusiness(createBusinessDto, loggedInUserReference);
 
         return ApiUtil.response(HttpStatus.OK, ApiResponseDto.Status.success, "Successfully created business.", business);
+    }
+
+
+    @GetMapping("{userReference}")
+    @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
+    public ResponseEntity<ApiResponseDto> getBusinessBelongingToUser(@PathVariable String userReference) throws NotFoundRestApiException, SystemServiceException {
+
+        String loggedInUserReference = ApiUtil.getLoggedInUser();
+
+        if (!loggedInUserReference.equalsIgnoreCase(userReference))
+            throw new UnauthorizedUserException("Cannot access business belonging to another user. Confirm you are logged in as expected user");
+
+        List<BusinessDto> businessBelongingToUser = businessService.getBusinessBelongingToUser(userReference);
+
+        return ApiUtil.response(HttpStatus.OK, ApiResponseDto.Status.success, "Found business", businessBelongingToUser);
     }
 }
