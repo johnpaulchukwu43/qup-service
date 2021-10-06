@@ -16,6 +16,7 @@ import com.jworks.qup.service.utils.TemplateProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -74,6 +75,7 @@ public class EndUserNotificationService {
                 .recipient(recipient)
                 .reference(reference)
                 .sender(senderName)
+                .senderAddress(senderAddress)
                 .notificationType(notificationType)
                 .providerTemplateCode(endUserNotificationDto.getProviderTemplateCode())
                 .subject(endUserNotificationDto.getSubject())
@@ -82,14 +84,16 @@ public class EndUserNotificationService {
                 .build();
 
         if (baseEndUser instanceof EndUser) {
-            EndUserNotification endUserNotification = (EndUserNotification) baseNotification;
+            EndUserNotification endUserNotification = new EndUserNotification();
+            BeanUtils.copyProperties(baseNotification, endUserNotification);
             endUserNotification.setEndUser((EndUser) baseEndUser);
             endUserNotification = endUserNotificationRepository.save(endUserNotification);
 
             endUserNotificationProcessor.processNotification(endUserNotification);
 
         } else if (baseEndUser instanceof EndUserOnboardRequest) {
-            EndUserOnboardNotification endUserOnboardNotification = (EndUserOnboardNotification) baseNotification;
+            EndUserOnboardNotification endUserOnboardNotification = new EndUserOnboardNotification();
+            BeanUtils.copyProperties(baseNotification, endUserOnboardNotification);
             endUserOnboardNotification.setEndUserOnboardRequest((EndUserOnboardRequest) baseEndUser);
             endUserOnboardNotification = endUserOnboardNotificationRepository.save(endUserOnboardNotification);
             endUserNotificationProcessor.processNotification(endUserOnboardNotification);

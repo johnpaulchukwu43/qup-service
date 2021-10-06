@@ -52,8 +52,11 @@ public class EndUserQueueDto implements Serializable {
 
     private Timestamp updatedAt;
 
+    private BusinessDto business;
+
     public EndUserQueueDto (EndUserQueue endUserQueue){
         BeanUtils.copyProperties(endUserQueue,this);
+        this.setBusiness(new BusinessDto(endUserQueue.getBusiness()));
     }
 
 }

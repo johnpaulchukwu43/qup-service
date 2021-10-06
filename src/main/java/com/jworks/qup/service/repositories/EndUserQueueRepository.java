@@ -4,8 +4,6 @@ import com.jworks.app.commons.repositories.BaseRepository;
 import com.jworks.qup.service.entities.EndUserQueue;
 import com.jworks.qup.service.enums.QueuePurpose;
 import com.jworks.qup.service.enums.QueueStatus;
-import com.jworks.qup.service.models.EndUserQueueDto;
-import com.jworks.qup.service.models.EndUserQueueInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
 /**
@@ -27,19 +26,24 @@ public interface EndUserQueueRepository extends BaseRepository<EndUserQueue> {
             "SELECT euq FROM EndUserQueue euq " +
                     "WHERE ((:queueStatus IS NULL) OR (euq.queueStatus = :queueStatus))" +
                     " AND ((:queueCode IS NULL) OR (euq.queueCode = :queueCode))" +
-                    " AND ((:createdOn IS NULL) OR (euq.createdAt = :createdOn))" +
-                    " AND ((:expiryDate IS NULL) OR (euq.expirationDate = :expiryDate))" +
                     " AND ((:queuePurpose IS NULL) OR (euq.queuePurpose = :queuePurpose))"+
-                    " AND (euq.endUser.userReference = :userReference)"
+                    " AND (euq.endUser.userReference = :userReference)" +
+                    "AND ((:createdOnStartDate IS NULL AND :createdOnEndDate IS NULL)" +
+                    "OR (euq.createdAt >= :createdOnStartDate AND euq.createdAt <= :createdOnEndDate))" +
+                    "AND ((:expiryStartDate IS NULL AND :expiryEndDate IS NULL)" +
+                    "OR (euq.expirationDate >= :expiryStartDate AND euq.expirationDate <= :expiryEndDate))"
+
 
     )
     Page<EndUserQueue> getAllQueuesByUserReferenceFilteredBy(
             @Param("queueStatus") QueueStatus queueStatus,
             @Param("queueCode") String queueCode,
-            @Param("createdOn") Timestamp createdOn,
             @Param("queuePurpose") QueuePurpose queuePurpose,
             @Param("userReference") String userReference,
-            @Param("expiryDate") Timestamp expiryDate,
+            @Param("createdOnStartDate") Timestamp createdOnStartDate,
+            @Param("createdOnEndDate") Timestamp createdOnEndDate,
+            @Param("expiryStartDate") LocalDateTime expiryStartDate,
+            @Param("expiryEndDate") LocalDateTime expiryEndDate,
             Pageable pageable
     );
 

@@ -6,6 +6,7 @@ import com.jworks.qup.service.exceptions.CustomEndUserFormException;
 import com.jworks.qup.service.models.CustomEndUserAnswerDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -30,4 +31,10 @@ public class QupControllerAdvice extends GeneralControllerAdvice {
 
         return new ApiResponseDto(ApiResponseDto.Status.fail, ex.getMessage(), (Serializable) responseMap);
     }
+
+    @ExceptionHandler({UnauthorizedUserException.class})
+    public ApiResponseDto handleUnauthorizedUserException(UnauthorizedUserException ex) {
+        return processException(ApiResponseDto.Status.fail, ex.getMessage(), ex);
+    }
+
 }

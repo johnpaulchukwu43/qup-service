@@ -69,7 +69,7 @@ public class EndUserQueueAndCustomFormService {
         if (customFormIdExists) {
             customEndUserFormRepository.saveAll(updatedForms);
         } else {
-            throw new UnProcessableOperationException(String.format("No form found for %s", customFormId));
+            throw new UnProcessableOperationException(String.format("No form found with id: %s", customFormId));
         }
 
         if (!endUserQueue.isFormDefaultSet()) {
@@ -102,7 +102,7 @@ public class EndUserQueueAndCustomFormService {
             Set<CustomEndUserForm> customEndUserFormList = endUserQueue.getCustomEndUserFormList();
             Long customFormId = toggleCustomFormRequirementDto.getCustomFormId();
             if (customEndUserFormList.isEmpty()) {
-                customEndUserFormRepository.findById(customFormId).orElseThrow(() -> new UnProcessableOperationException("Cannot update Queue: %s, to require forms as no existing form records found. Please create a form first."));
+                customEndUserFormRepository.findById(customFormId).orElseThrow(() -> new UnProcessableOperationException(String.format("Cannot update Queue with code: %s, to require forms as no existing form records found. Please create a form first.", endUserQueue.getQueueCode())));
             }
 
             endUserQueue.setRequiresQueueForm(true);

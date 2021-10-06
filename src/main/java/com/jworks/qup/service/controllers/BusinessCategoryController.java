@@ -1,13 +1,10 @@
 package com.jworks.qup.service.controllers;
 
-import com.jworks.app.commons.exceptions.NotFoundRestApiException;
 import com.jworks.app.commons.exceptions.SystemServiceException;
-import com.jworks.app.commons.exceptions.UnProcessableOperationException;
 import com.jworks.app.commons.models.ApiResponseDto;
 import com.jworks.app.commons.utils.ApiUtil;
 import com.jworks.app.commons.utils.RestConstants;
 import com.jworks.qup.service.models.BusinessCategoryDto;
-import com.jworks.qup.service.models.BusinessDto;
 import com.jworks.qup.service.services.BusinessCategoryService;
 import com.jworks.qup.service.utils.HasAuthority;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping(
-        value = RestConstants.API_V1_PREFIX + "/businessCategories",
+        value = RestConstants.API_V1_PREFIX + "/business-categories",
         produces = MediaType.APPLICATION_JSON_VALUE
 )
 @RequiredArgsConstructor
@@ -41,7 +38,7 @@ public class BusinessCategoryController {
 
     @PostMapping
     @PreAuthorize(HasAuthority.OF_USER_OR_ADMIN)
-    public ResponseEntity<ApiResponseDto> createBusinessCategory(@Validated @RequestBody BusinessCategoryDto businessCategoryDto) throws SystemServiceException, NotFoundRestApiException, UnProcessableOperationException {
+    public ResponseEntity<ApiResponseDto> createBusinessCategory(@Validated @RequestBody BusinessCategoryDto businessCategoryDto) throws SystemServiceException {
 
         String loggedInUserReference = ApiUtil.getLoggedInUser();
 

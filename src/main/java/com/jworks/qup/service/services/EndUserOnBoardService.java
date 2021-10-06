@@ -98,6 +98,10 @@ public class EndUserOnBoardService extends ServiceBluePrintImpl<EndUserOnboardRe
     public void performUserVerification(EndUserVerifyDto endUserVerifyDto) throws UnProcessableOperationException, SystemServiceException {
 
         EndUserOnboardRequest onboardRequest = getOnboardRequest(endUserVerifyDto);
+
+        if (onboardRequest.isVerificationComplete())
+            throw new UnProcessableOperationException("Verification already completed.");
+
         onboardRequest.setVerificationComplete(true);
         onboardRequest = save(onboardRequest);
 

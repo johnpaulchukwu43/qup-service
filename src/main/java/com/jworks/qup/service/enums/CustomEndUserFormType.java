@@ -1,5 +1,7 @@
 package com.jworks.qup.service.enums;
 
+import com.jworks.app.commons.exceptions.BadRequestException;
+
 public enum CustomEndUserFormType {
 
     PRE_QUEUE_FORM, POST_QUEUE_FORM;
@@ -13,12 +15,12 @@ public enum CustomEndUserFormType {
         return false;
     }
 
-    public static CustomEndUserFormType toCustomEndUserFormType(String customEndUserFormType) {
+    public static CustomEndUserFormType toCustomEndUserFormType(String customEndUserFormType) throws BadRequestException {
         for (CustomEndUserFormType ft : CustomEndUserFormType.values()) {
             if (ft.name().equalsIgnoreCase(customEndUserFormType)) {
                 return ft;
             }
         }
-        throw new IllegalArgumentException(String.format("Unrecognized value: %s as form type", customEndUserFormType));
+        throw new BadRequestException(String.format("Unrecognized value: %s as form type", customEndUserFormType));
     }
 }
