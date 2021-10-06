@@ -8,10 +8,12 @@ import com.jworks.qup.service.entities.CustomEndUserQuestion;
 import com.jworks.qup.service.entities.EndUser;
 import com.jworks.qup.service.exceptions.CustomEndUserFormException;
 import com.jworks.qup.service.models.CustomEndUserAnswerDto;
+import com.jworks.qup.service.models.CustomEndUserAnswerEncloser;
 import com.jworks.qup.service.repositories.CustomEndUserAnswerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,19 +43,19 @@ public class CustomEndUserAnswerService extends ServiceBluePrintImpl<CustomEndUs
     }
 
 
-    void submitAnswersToQuestionsInForm(CustomEndUserAnswerDto.Answers customEndUserAnswerDto, CustomEndUserForm customEndUserForm) throws NotFoundRestApiException, CustomEndUserFormException {
+    void submitAnswersToQuestionsInForm(@Valid CustomEndUserAnswerEncloser customEndUserAnswerEncloser, CustomEndUserForm customEndUserForm) throws NotFoundRestApiException, CustomEndUserFormException {
 
-        if (customEndUserAnswerDto == null || customEndUserForm == null)
-            throw new IllegalArgumentException("Unexpected null parameter value for customEndUserAnswerDto and customEndUserForm");
+        if (customEndUserAnswerEncloser == null || customEndUserForm == null)
+            throw new IllegalArgumentException("Unexpected null parameter value for customEndUserAnswerEncloser and customEndUserForm");
 
         HashMap<CustomEndUserQuestion, CustomEndUserAnswerDto> expectedQuestionAndProvidedQuestionAnswerMap = new HashMap<>();
 
         List<CustomEndUserAnswerDto.ValidationError> errorList = new ArrayList<>();
 
-        List<CustomEndUserAnswerDto> answers = customEndUserAnswerDto.getUserQuestionAnswerList();
+        List<CustomEndUserAnswerDto> answers = customEndUserAnswerEncloser.getUserQuestionAnswerList();
 
 
-        EndUser userProvidingAnswers = endUserService.getUserByUserReference(customEndUserAnswerDto.getUserReferenceOfAnswerProvider());
+        EndUser userProvidingAnswers = endUserService.getUserByUserReference(customEndUserAnswerEncloser.getUserReferenceOfAnswerProvider());
 
         List<CustomEndUserQuestion> questions = customEndUserForm.getCustomEndUserQuestions();
 

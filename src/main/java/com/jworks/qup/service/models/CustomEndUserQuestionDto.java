@@ -1,5 +1,6 @@
 package com.jworks.qup.service.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.jworks.qup.service.entities.CustomEndUserQuestion;
 import com.jworks.qup.service.enums.CustomEndUserAnswerType;
 import lombok.AllArgsConstructor;
@@ -19,9 +20,12 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomEndUserQuestionDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    private Long id;
 
     private String question;
 
@@ -30,6 +34,8 @@ public class CustomEndUserQuestionDto implements Serializable {
     private Long minAnswerLength;
 
     private Long maxAnswerLength;
+
+    private boolean isRequired;
 
     public CustomEndUserQuestionDto(CustomEndUserQuestion entity) {
         BeanUtils.copyProperties(entity, this);

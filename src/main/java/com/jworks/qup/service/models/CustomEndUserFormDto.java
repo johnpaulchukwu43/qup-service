@@ -1,6 +1,8 @@
 package com.jworks.qup.service.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.jworks.qup.service.entities.CustomEndUserForm;
+import com.jworks.qup.service.entities.CustomEndUserQuestion;
 import com.jworks.qup.service.enums.CustomEndUserFormType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,9 +23,12 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomEndUserFormDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    private Long id;
 
     private String name;
 
@@ -34,7 +40,7 @@ public class CustomEndUserFormDto implements Serializable {
 
     private EndUserQueueInfo associatedQueue;
 
-    private List<CustomEndUserQuestionDto> questions;
+    private List<CustomEndUserQuestionDto> questions = new ArrayList<>();
 
     public CustomEndUserFormDto(CustomEndUserForm customEndUserForm) {
         BeanUtils.copyProperties(customEndUserForm, this);
@@ -43,7 +49,10 @@ public class CustomEndUserFormDto implements Serializable {
 
         this.associatedQueue = new EndUserQueueInfo(customEndUserForm.getEndUserQueue());
 
-        customEndUserForm.getCustomEndUserQuestions().forEach(question -> this.questions.add(new CustomEndUserQuestionDto(question)));
+        List<CustomEndUserQuestion> customEndUserQuestions = customEndUserForm.getCustomEndUserQuestions();
 
+        if (customEndUserQuestions != null && !customEndUserQuestions.isEmpty()) {
+            customEndUserQuestions.forEach(question -> this.questions.add(new CustomEndUserQuestionDto(question)));
+        }
     }
 }

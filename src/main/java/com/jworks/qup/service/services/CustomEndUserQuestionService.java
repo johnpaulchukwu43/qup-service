@@ -106,7 +106,7 @@ public class CustomEndUserQuestionService extends ServiceBluePrintImpl<CustomEnd
 
     private CustomEndUserForm getCustomEndUserForm(Long customEndUserFormId) throws UnProcessableOperationException {
         return customEndUserFormRepository.findById(customEndUserFormId).
-                orElseThrow(() -> new UnProcessableOperationException(String.format("No form found for %s", customEndUserFormId)));
+                orElseThrow(() -> new UnProcessableOperationException(String.format("No form found with id: %s", customEndUserFormId)));
     }
 
     private List<CustomEndUserQuestionDto> toCustomEndUserQuestionDtoList(List<CustomEndUserQuestion> customEndUserQuestions) {

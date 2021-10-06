@@ -5,10 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author Johnpaul Chukwu.
@@ -28,16 +26,7 @@ public class CustomEndUserAnswerDto implements Serializable {
     @NotNull
     private Long questionId;
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class Answers implements Serializable {
 
-        @Valid
-        private List<CustomEndUserAnswerDto> userQuestionAnswerList;
-
-        private String userReferenceOfAnswerProvider;
-    }
 
     @Data
     @Builder

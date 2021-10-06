@@ -108,8 +108,8 @@ public class EndUserQuestionnaireController {
 
     }
 
-    @PutMapping("forms/{formId}/answers")
-    public ResponseEntity<ApiResponseDto> answerFormQuestions(@Valid @RequestBody CustomEndUserAnswerDto.Answers answersDto,
+    @PostMapping("forms/{formId}/answers")
+    public ResponseEntity<ApiResponseDto> answerFormQuestions(@Valid @RequestBody CustomEndUserAnswerEncloser answersDto,
                                                               @PathVariable Long formId) throws SystemServiceException, UnProcessableOperationException, NotFoundRestApiException {
 
         answersDto.setUserReferenceOfAnswerProvider(ApiUtil.getLoggedInUser());
