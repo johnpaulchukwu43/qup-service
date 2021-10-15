@@ -42,12 +42,15 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
     private final EndUserQueueRepository endUserQueueRepository;
     private final EndUserService endUserService;
     private final EndUserPoolConfigService endUserPoolConfigService;
+    private final QueueIdSequenceGenerator queueIdSequenceGenerator;
 
-    public EndUserQueueService(EndUserQueueRepository endUserQueueRepository, EndUserService endUserService, EndUserPoolConfigService endUserPoolConfigService) {
+    public EndUserQueueService(EndUserQueueRepository endUserQueueRepository, EndUserService endUserService,
+                               EndUserPoolConfigService endUserPoolConfigService, QueueIdSequenceGenerator queueIdSequenceGenerator) {
         super(endUserQueueRepository);
         this.endUserQueueRepository = endUserQueueRepository;
         this.endUserService = endUserService;
         this.endUserPoolConfigService = endUserPoolConfigService;
+        this.queueIdSequenceGenerator = queueIdSequenceGenerator;
     }
 
 
@@ -73,6 +76,8 @@ public class EndUserQueueService extends ServiceBluePrintImpl<EndUserQueue, EndU
 
 
         createAssociatedPoolConfigForQueue(endUserQueue, createEndUserQueueDto.getMaxNumberOfUsersInPool());
+
+        queueIdSequenceGenerator.registerQueue(endUserQueue.getId());
 
         return convertEntityToDto(endUserQueue);
 

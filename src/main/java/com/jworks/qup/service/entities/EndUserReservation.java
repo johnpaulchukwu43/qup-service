@@ -25,6 +25,7 @@ import java.io.Serializable;
         indexes = {
         @Index(name = "RESERVATION_STATUS_INDEX", columnList = "reservation_status"),
         @Index(name = "RESERVATION_CODE_INDEX", columnList = "reservation_code"),
+        @Index(columnList = "joinId"),
 })
 public class EndUserReservation extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -43,4 +44,8 @@ public class EndUserReservation extends BaseEntity implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "queue_id", referencedColumnName = "id", nullable = false)
     private EndUserQueue endUserQueue;
+
+    // Record uniqueness by (queue_id, join_id)
+    @Column(nullable = false)
+    private Long joinId;
 }

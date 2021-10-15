@@ -42,12 +42,15 @@ public class EndUserReservationService extends ServiceBluePrintImpl<EndUserReser
     private final EndUserReservationRepository endUserReservationRepository;
     private final EndUserService endUserService;
     private final EndUserQueueService endUserQueueService;
+    private final QueueIdSequenceGenerator queueIdSequenceGenerator;
 
-    public EndUserReservationService(EndUserReservationRepository endUserReservationRepository, EndUserService endUserService, EndUserQueueService endUserQueueService) {
+    public EndUserReservationService(EndUserReservationRepository endUserReservationRepository, EndUserService endUserService,
+                                     EndUserQueueService endUserQueueService, QueueIdSequenceGenerator queueIdSequenceGenerator) {
         super(endUserReservationRepository);
         this.endUserReservationRepository = endUserReservationRepository;
         this.endUserService = endUserService;
         this.endUserQueueService = endUserQueueService;
+        this.queueIdSequenceGenerator = queueIdSequenceGenerator;
     }
 
     public String createReservation(CreateReservationDto createReservationDto, String userReference) throws NotFoundRestApiException, SystemServiceException, UnProcessableOperationException {
@@ -64,11 +67,13 @@ public class EndUserReservationService extends ServiceBluePrintImpl<EndUserReser
 
         EndUserQueue queueBeingReserved = endUserQueueService.getQueueById(queueId);
 
+        Long joinId = queueIdSequenceGenerator.generateNextJoinId(queueId);
         EndUserReservation endUserReservation = EndUserReservation.builder()
                 .reservationCode(reservationCode)
                 .reservationStatus(ReservationStatus.WAITING)
                 .endUser(userOwnerOfReservation)
                 .endUserQueue(queueBeingReserved)
+                .joinId(joinId)
                 .build();
 
         save(endUserReservation);

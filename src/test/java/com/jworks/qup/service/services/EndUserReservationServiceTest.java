@@ -27,11 +27,13 @@ public class EndUserReservationServiceTest extends AbstractServiceTest {
     private EndUserService endUserService;
     @MockBean
     private EndUserQueueService endUserQueueService;
+    @MockBean
+    private QueueIdSequenceGenerator queueIdSequenceGenerator;
 
     @BeforeEach
     public void setUp() {
         endUserReservationService = new EndUserReservationService(
-                endUserReservationProvider.getRepository(), endUserService, endUserQueueService
+                endUserReservationProvider.getRepository(), endUserService, endUserQueueService, queueIdSequenceGenerator
         );
     }
 
@@ -45,6 +47,7 @@ public class EndUserReservationServiceTest extends AbstractServiceTest {
 
         willReturn(endUser).given(endUserService).getUserByUserReference(endUser.getUserReference());
         willReturn(endUserQueue).given(endUserQueueService).getQueueById(endUserQueue.getId());
+        willReturn(1L).given(queueIdSequenceGenerator).generateNextJoinId(endUserQueue.getId());
 
         String reservationCode = endUserReservationService.createReservation(
                 CreateReservationDto.builder().queueId(endUserQueue.getId()).build(), endUser.getUserReference()

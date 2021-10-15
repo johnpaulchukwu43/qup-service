@@ -64,4 +64,12 @@ public interface EndUserReservationRepository extends BaseRepository<EndUserRese
             @Param("userReference") String userReference,
             Pageable pageable
     );
+
+    @Query("SELECT x FROM #{#entityName} x WHERE x.endUserQueue.id = :queueId AND x.reservationStatus = :reservationStatus")
+    Page<EndUserReservation> getReservationsMatching(long queueId, ReservationStatus reservationStatus, Pageable pageable);
+
+    @Query("SELECT COUNT(x) FROM #{#entityName} x WHERE x.endUserQueue.id = :queueId AND x.reservationStatus = :reservationStatus")
+    long countReservationsMatching(long queueId, ReservationStatus reservationStatus);
+
+    long countByEndUserQueueId(long queueId);
 }

@@ -1,6 +1,9 @@
 package com.jworks.qup.service.controllers;
 
-import com.jworks.qup.service.providers.impl.EndUserReservationProvider;
+import com.jworks.qup.service.models.CreateReservationDto;
+import com.jworks.qup.service.models.EndUserQueueDto;
+import com.jworks.qup.service.providers.impl.EndUserQueueProvider;
+import com.jworks.qup.service.services.EndUserQueueService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class EndUserReservationControllerTest extends AbstractResourceTest {
 
     @Autowired
-    private EndUserReservationProvider endUserReservationProvider;
+    private EndUserQueueService endUserQueueService;
+    @Autowired
+    private EndUserQueueProvider endUserQueueProvider;
 
     public EndUserReservationControllerTest() {
         super(EndUserReservationController.class);
@@ -26,7 +31,8 @@ public class EndUserReservationControllerTest extends AbstractResourceTest {
 
     @Test
     public void createReservationShouldSucceed() throws Exception {
-        asAdmin(post(endUserReservationProvider.provideDto(), endpoint()))
+        EndUserQueueDto endUserQueueDto = endUserQueueService.createQueue(endUserQueueProvider.provideDto(), adminUsername);
+        asAdmin(post(CreateReservationDto.builder().queueId(endUserQueueDto.getId()).build(), endpoint()))
                 .andDo(print())
                 .andExpect(successStatus())
                 .andExpect(data("reservationCode").isNotEmpty());

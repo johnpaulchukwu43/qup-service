@@ -47,7 +47,8 @@ public class BusinessService extends ServiceBluePrintImpl<Business, BusinessDto>
         EndUser ownerOfQueue = endUserService.getUserByUserReference(userReference);
 
         BusinessCategory businessCategory = businessCategoryRepository.findById(businessCategoryId)
-                .orElseThrow(() -> new UnProcessableOperationException(String.format("Business category with id: %s does not exist.", businessCategoryId)));
+                .orElseThrow(() -> new UnProcessableOperationException(
+                        String.format("Business category with id: %s does not exist.", businessCategoryId)));
 
         ensureNameDoesNotExist(createBusinessDto.getName());
         ensureEmailDoesNotExist(createBusinessDto.getEmailAddress());
@@ -79,6 +80,4 @@ public class BusinessService extends ServiceBluePrintImpl<Business, BusinessDto>
             throw new DuplicateEntryException(String.format("PhoneNumber: %s is already taken.", phoneNumber));
         }
     }
-
-
 }

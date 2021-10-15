@@ -24,10 +24,11 @@ import org.mockito.BDDMockito;
 public class CommonOperations {
 
     private int counter;
-    private final Random random;
+    private static final Random random;
 
-    {
+    static {
         long seed = (long) (Math.random() * 1_000_000_000_000_000L);
+//        long seed = 653285771874927L;
         random = new Random(seed);
         System.out.println("seed = " + seed);
     }
@@ -40,7 +41,7 @@ public class CommonOperations {
         return ++counter;
     }
 
-    public Random getRandom() {
+    public static Random getRandom() {
         return random;
     }
 

@@ -39,6 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AbstractResourceTest extends ResourceTestSupport {
 
     protected static final String RUN_ALL_TESTS_PROFILE = "full"; // Includes slow running integration tests in tests to run.
+    protected static final String adminUsername = ((User) AuthenticationMocks.adminAuthentication().getPrincipal()).getUsername();
 
     @Autowired
     private EndUserProvider endUserProvider;
@@ -50,10 +51,9 @@ public class AbstractResourceTest extends ResourceTestSupport {
     @PostConstruct
     public void init() {
         // Save admin user to db.
-        final String userReference = ((User) AuthenticationMocks.adminAuthentication().getPrincipal()).getUsername();
-        if (!endUserProvider.getRepository().existsByUserReference(userReference)) {
+        if (!endUserProvider.getRepository().existsByUserReference(adminUsername)) {
             EndUser endUser = endUserProvider.provide();
-            endUser.setUserReference(userReference);
+            endUser.setUserReference(adminUsername);
             endUserProvider.save(endUser);
         }
     }

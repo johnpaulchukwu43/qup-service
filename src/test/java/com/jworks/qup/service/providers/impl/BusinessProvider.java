@@ -43,6 +43,16 @@ public class BusinessProvider implements EntityProvider<Business> {
     }
 
     @Override
+    public boolean postDelete(Business business) {
+        boolean isWithoutErrors = true;
+        if (business.getEndUser() != null)
+            isWithoutErrors &= endUserProvider.delete(business.getEndUser());
+        if (business.getBusinessCategory() != null)
+            isWithoutErrors &= businessCategoryProvider.delete(business.getBusinessCategory());
+        return isWithoutErrors;
+    }
+
+    @Override
     public BusinessRepository getRepository() {
         return businessRepository;
     }
